@@ -173,6 +173,28 @@
   </div>
 </div>
 </div>
+    {{-- ################################################
+
+                         Model Plus Data
+
+         ################################################ --}}
+  <div class="modal fade" id="plusData">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Modal title</h4>
+        </div>
+        <div class="modal-body">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
 
 @section('js')
@@ -230,6 +252,7 @@
         }
 
       });
+
         $('#StoreBtn').on('click',function(e){
           e.preventDefault();
           var content = CKEDITOR.instances.content.getData();
@@ -272,6 +295,7 @@
                 '<td>'+response.sale_cost+'</td>'+
                 '<td>'+response.updated_at+'</td>'+
                 '<td>'+
+                '<button type="button" class="btn btn-xs btn-success fa fa-plus" onclick="plusData('+response.id+')" data-toggle="modal" href="#plusData"></button> '+
                 '<button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#showProduct"><i class="fa fa-eye" aria-hidden="true"></i></button> '+
                 ' <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response.id+')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button> '+
                 ' <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('+response.id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+
@@ -373,6 +397,7 @@ $('#UpdateBtn').on('click',function(e){
         '<td>'+response.sale_cost+'</td>'+
         '<td>'+response.updated_at+'</td>'+
         '<td>'+
+        '<button type="button" class="btn btn-xs btn-success fa fa-plus" onclick="plusData('+response.id+')" data-toggle="modal" href="#plusData"></button> '+
         '<button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#showProduct"><i class="fa fa-eye" aria-hidden="true"></i></button> '+
         ' <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response.id+')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button> '+
         ' <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('+response.id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+
@@ -423,7 +448,21 @@ $('#UpdateBtn').on('click',function(e){
 });
 })
 
+  function plusData(id) {$.ajax({
+          type: "GET",
+          url: "product/plus/"+id,
 
+          success: function(response)
+          {
+
+          console.log(response);     
+         },
+         error: function (xhr, ajaxOptions, thrownError) {
+          toastr.error(thrownError);
+        }
+      });
+
+      }
 
   // get data for form update
   function getProduct(id) {

@@ -21,6 +21,7 @@ class CreateAdminsTable extends Migration
             $table->string('address');
             $table->integer('phone');
             $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
         });
     }

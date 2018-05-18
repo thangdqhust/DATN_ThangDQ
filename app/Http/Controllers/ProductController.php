@@ -10,6 +10,8 @@ use App\Vendor;
 use App\Product_detail;
 use App\User;
 use App\Gallary_image;
+use App\Size;
+use App\Color;
 class ProductController extends Controller
 {
     public function index(){
@@ -33,6 +35,7 @@ class ProductController extends Controller
         return Datatables::of($products)
         ->addColumn('action', function ($product) {
             return'
+            <a type="button" class="btn btn-xs btn-success fa fa-plus" href="users/'.$product['slug'].'" ></a> 
             <button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#showProduct"><i class="fa fa-eye" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('.$product['id'].')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('.$product['id'].')"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -49,9 +52,20 @@ class ProductController extends Controller
         // ->rawColumns(['action'])
         ->make(true);
 }
-	
+	public function plusData($id){
+        $product=Product::find($id);
+        $product['images']=Gallary_image::where('product_id',$id)->first();
+        $product_detail=Product_detail::where('product_id',$product['id'])->first();
+        if (!empty($product_detail)) {
+        $size=Size::where('id',$product_detail['size_id'])->get();
+        $product['size']=$size->size;
+        $color=Color::where('id',$product_detail['color_id'])->get();
+        $product['color']=$color->color;
+        }
+        return response()->json($product);
+    }
     public function getProduct($id){
-        $product=Product::find($id)  ;
+        $product=Product::find($id);
         // $categories=Category::orderBy('id','DESC')->get();
         $product['images']=Gallary_image::where('product_id',$id)->get();
         return response()->json($product);
@@ -67,21 +81,10 @@ class ProductController extends Controller
         $vendor=$request->only(['vendor']);
         $codeVendor=Vendor::where('id',$vendor)->first();
         $data=$request->only(['name','description','content','sale_cost','origin_cost']);
-        (int)$number=Product::where('vendor',$codeVendor['id'])->count();
-        $numberAll=$number+2;
-        if ($number<10) {
-        $data['code']=$codeVendor['code'].'0000'.$numberAll;
-        }elseif ($number<100) {
-            $data['code']=$codeVendor['code'].'000'.$numberAll;
-        }elseif ($number<1000) {
-            $data['code']=$codeVendor['code'].'00'.$numberAll;
-        }elseif ($number<10000) {
-            $data['code']=$codeVendor['code'].'0'.$numberAll;
-        }
+        $data['code']=$codeVendor['code'].'0'.time();
         $data['slug']=str_slug($data['name']);
         $data['vendor']=$codeVendor['id'];
         $product=Product::create($data);
-        
         foreach ($request['images'] as $key => $image) {
             $imageName= 'http://'.request()->getHttpHost().'/images/product/'.time().$key.'.'.$image->getClientOriginalExtension();
 
@@ -131,5 +134,10 @@ class ProductController extends Controller
     public function getReason($id){
         $post=Post::where('id',$id)->first();
         return $post;
+    }
+    public function manageUser($slug){
+
+        $products= Product::where('slug',$slug)->first();
+        
     }
 }
