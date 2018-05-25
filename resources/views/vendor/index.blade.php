@@ -167,7 +167,7 @@
       newPost.append('address',$('#address').val());
       $.ajax({
         type:'post',
-        url:"vendor/store",
+        url:"{{ asset('admmin/vendor/store') }}",
         data:newPost,
         dataType:'json',
         async:false,
@@ -259,7 +259,7 @@
       updatePost.append('address',$('#eaddress').val());
       $.ajax({
         type:'post',
-        url: "vendor/update",
+        url: "{{ asset('admin/vendor/update') }}",
 
         data:updatePost,
         dataType:'json',
@@ -339,7 +339,7 @@
   function getProduct(id) {
     $.ajax({
       type: "GET",
-      url: "getVendor/"+id,
+      url: "{{ asset('admin/getVendor') }}/"+id,
 
       success: function(response)
       {
@@ -374,7 +374,7 @@
         if (isConfirm) {
           $.ajax({
             type: "delete",
-            url: "vendor/"+id,
+            url: "{{ asset('vendor') }}/"+id,
             success: function(res)
             {
 

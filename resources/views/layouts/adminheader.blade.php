@@ -256,26 +256,40 @@
        <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
         <li>
-          <a href="{{ asset('products') }}">
+          <a href="{{ asset('admin/products') }}">
             <i class="fa fa-dashboard"></i> <span>Products</span>
               <i class="fa fa-angle-left"></i>
           </a>
         </li>
         <li>
-          <a href="{{ asset('categories') }}">
+          <a href="{{ asset('admin/categories') }}">
             <i class="fa fa-dashboard"></i> <span>Category</span>
               <i class="fa fa-angle-left"></i>
           </a>
         </li>
         <li>
-          <a href="{{ asset('users') }}">
+          <a href="{{ asset('admin/users') }}">
             <i class="fa fa-dashboard"></i> <span>Users</span>
               <i class="fa fa-angle-left"></i>
             </span>
           </a>
         </li>
         <li>
-          <a href="{{ asset('vendors') }}">
+          <a href="{{ asset('admin/colors') }}">
+            <i class="fa fa-dashboard"></i> <span>Colors</span>
+              <i class="fa fa-angle-left"></i>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ asset('admin/sizes') }}">
+            <i class="fa fa-dashboard"></i> <span>Size</span>
+              <i class="fa fa-angle-left"></i>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ asset('admin/vendors') }}">
             <i class="fa fa-dashboard"></i> <span>Vendor</span>
               <i class="fa fa-angle-left"></i>
           </a>

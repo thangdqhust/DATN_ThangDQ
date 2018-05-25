@@ -18,16 +18,14 @@
 <div class="container" style="width:100%">
   <h2>Categories</h2>
   <br />
-
-  <a href="#"  class="btn btn-info" data-toggle="modal" data-target="#create">+ Thêm mới </a>
+  <button href="#"  class="btn btn-info" id="addColor">+ Thêm mới </button>
+  <input type="text" name="" id="color" class="form-control" style="width: 50%;display: inline-block;">
   <br><br>
   <table id="users-table" class="table table-striped">
     <thead class="flg">
       <tr>
         <th>ID</th>
-        <th>Name</th>
-        <th>Parent_Category</th>
-        <th>Sort_Order</th>
+        <th>Size</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -40,75 +38,22 @@
         <h5 class="modal-title" id="">Cập Nhật Thông Tin Danh Mục</h5>
       </div>
       <div class="modal-body">
-        <form action="" method="user" role="form" id="editUser" style=" width:100%" enctype="multipart/form-data">
-          {{ csrf_field() }}
           <div class="form-group">
-            <label class="control-label col-sm-2" for="name">Name:</label>
-            <input type="text" class="form-control" id="ename" placeholder="Enter name" name="name">
-          </div>
-          <select name="ecategory_id" id="eparent_id" style="width: 100%" class="form-control">
-            <option  value="0" style="font-weight: 900;color:red"><b> <strong>Main Category </strong></b> </option>
-            @foreach($categories as $category)
-            <option value="{{$category['id']}}">{{$category['name']}}</option>}
-            option
-            @endforeach
-          </select>
-          <div class="form-group">
-            @if ($errors->has('phone'))
-            <span class="errors">{{$errors->first('phone')}}</span>
-            @endif
-            <label class="control-label" for="phone">Sort_Order:</label>        
-            <input type="tel" name="esort_order"  class="form-control" id="esort_order" value="" placeholder="">
+            <label class="control-label col-sm-2" for="name">Size:</label>
+            <input type="text" class="form-control" id="ecolor" placeholder="Enter name" name="name">
           </div>
           <input type="hidden" name="eid" id="eid">
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="button" id="UpdateBtn" class="btn btn-primary">Save changes</button>
-          </div> 
-        </form>
+          </div>
       </div>
 
     </div>
   </div>
 </div>
 <!-- Modal add -->
-<div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="edituser">Thêm Danh Mục</h5>
-      </div>
-      <div class="modal-body">
-        <form action="" method="post" id="addUser" style=" width:100%" enctype="multipart/form-data">
-          {{ csrf_field() }}
-          <div class="form-group">
-            <label class="control-label col-sm-2" for="name">Name:</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
-          </div>
-          <div class="form-group">
-            <label class="control-label col-sm-2 " for="description">Category:</label>
-            <select name="category_id" id="parent_id" style="width: 100%" class="form-control">
-              <option  value="0" style="font-weight: 900;color:red"><b> <strong>Main Category </strong></b> </option>}
-              @foreach($categories as $category)
-              <option value="{{$category['id']}}">{{$category['name']}}</option>}
-              option
-              @endforeach
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="phone">Sort_Order:</label>        
-            <input type="tel" name="sort_order"  class="form-control" id="sort_order" value="" placeholder="">
-          </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" id="StoreBtn" class="btn btn-primary">Save changes</button>
-          </div> 
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 @endsection
 @section('js')
 
@@ -118,12 +63,10 @@
     $('#users-table').DataTable({
       processing: true,
       serverSide: true,
-      ajax: '{!! route('categories.data') !!}',
+      ajax: '{!! route('size.data') !!}',
       columns: [
       { data: 'id', name: 'id' },
-      { data: 'name', name: 'name' },
-      { data: 'sort_order', name: 'sort_order' },
-      { data: 'parent_id', name: 'parent_id' },
+      { data: 'size', name: 'size' },
       { data: 'action', name: 'action' },
       ]
     });
@@ -135,58 +78,39 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-    $('#StoreBtn').on('click',function(e){
+    $('#addColor').on('click',function(e){
       e.preventDefault();
-      console.log($('#name').val());
       $.ajax({
         type:'post',
-        url:"{{asset('admin/categories/store')}}",
+        url:"{{asset('admin/size/store')}}",
         data:{
-          name:$('#name').val(),
-          parent_id:$('#parent_id').val(),
-          sort_order:$('#sort_order').val(),
+          size:$('#color').val(),
         },
         success:function(response){
          console.log(response);
-         setTimeout(function () {
-           toastr.success('has been added');
-
-                  // 
-                },1000);
-                // var data = JSON.parse(response).data;
+         setTimeout(function () {toastr.success('size '+response.size+' has been added');},1000);
                 var html=
-                '<tr id="category_'+response.id+'">'+
+                '<tr id="color-'+response.id+'">'+
                 '<td>'+response.id+'</td>'+
-                '<td>'+response.name+'</td>'+
-                '<td>'+response.parent_id+'</td>'+
-                '<td>'+response.sort_order+'</td>'+
+                '<td>'+response.size+'</td>'+
                 '<td>'+
-                '<button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#showProduct"><i class="fa fa-eye" aria-hidden="true"></i></button> '+
                 ' <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response.id+')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button> '+
                 ' <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('+response.id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+
                 '</td>'+
                 '</tr>';
                 $('tbody').prepend(html);
-                $('#create').modal('hide');
+                $('#color').val('');
 
               }, error: function (xhr, ajaxOptions, thrownError) {
                 if (!checkNull(xhr.responseJSON.errors)) {
                   console.log(xhr.responseJSON.errors);
                   $('p#sperrors').remove();
-                  if(!checkNull(xhr.responseJSON.errors.name))
+                  if(!checkNull(xhr.responseJSON.errors.size))
                   {
-                    for (var i = 0; i < xhr.responseJSON.errors.name.length; i++) {
-                      var html='<p id="sperrors" style="color:red">'+xhr.responseJSON.errors.name[i]+'</p>';
+                    for (var i = 0; i < xhr.responseJSON.errors.size.length; i++) {
+                      var html='<p id="sperrors" style="color:red">'+xhr.responseJSON.errors.size[i]+'</p>';
 
-                      $(html).insertAfter('#name');
-                    }
-                  };
-                  if(!checkNull(xhr.responseJSON.errors.sort_order))
-                  {
-                    for (var i = 0; i < xhr.responseJSON.errors.sort_order.length; i++) {
-                      var html='<p id="sperrors" style="color:red">'+xhr.responseJSON.errors.sort_order[i]+'</p>';
-                      console.log(html);
-                      $(html).insertAfter('#sort_order');
+                      $(html).insertAfter('#color');
                     }
                   };
                 }
@@ -203,54 +127,36 @@
 
   // delete post
 
-  $(document).on('click','.btn-danger',function(){
-    var id=$(this).data('id');
-    var btn=$(this);
-    $.ajax({
-      type:'delete',
-      url:'categories/'+id,
-      success:function(response){
-        btn.parent().parent().remove();
-        toastr.success(response.message);
-      }
-    });
-  });
 
   // get data for form update
 
       // Update function
       $('#UpdateBtn').on('click',function(e){
         e.preventDefault();
-        var id=$('#eid').val();
+        var id=$('#ecolor').val();
         console.log(id);
         $.ajax({
           type:'post',
-          url: "{{ asset('admin/categories/update') }}",
+          url: "{{ asset('admin/size/update') }}",
           data:{
-            name:$('#ename').val(),
-            parent_id:$('#eparent_id').val(),
-            sort_order:$('#esort_order').val(),
+            size:$('#ecolor').val(),
             id:$('#eid').val(),
           },
           success: function(response){
-            console.log(response);
             setTimeout(function () {
-              toastr.success(response.name+'has been added');
+              toastr.success(response.size+' has been update');
 
             },1000);
 
             $('#editProduct').modal('hide');
             var html=
             '<td>'+response.id+'</td>'+
-            '<td>'+response.name+'</td>'+
-            '<td>'+response.parent_id+'</td>'+
-            '<td>'+response.sort_order+'</td>'+
+            '<td>'+response.size+'</td>'+
             '<td>'+
-            '<button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#showProduct"><i class="fa fa-eye" aria-hidden="true"></i></button> '+
             ' <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response.id+')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button> '+
             ' <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('+response.id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+
             '</td>';
-            $('#category-'+response.id).html(html);
+            $('#color-'+response.id).html(html);
           }, error: function (xhr, ajaxOptions, thrownError) {
             if (!checkNull(xhr.responseJSON.errors)) {
               console.log(xhr.responseJSON.errors);
@@ -281,16 +187,13 @@
       function getProduct(id) {
         console.log(id);
         // $('#editPost').modal('show');
-
         $.ajax({
           type: "GET",
-          url: "categories/edit/" + id,
+          url: "{{ asset('admin/size/edit') }}" +"/"+ id,
 
           success: function(response)
-          { console.log(response);
-            $('#ename').val(response.name);
-            $('#eparent_id').val(response.parent_id);
-            $('#esort_order').val(response.sort_order);
+          { 
+            $('#ecolor').val(response.size);
             $('#eid').val(response.id);
           },
           error: function (xhr, ajaxOptions, thrownError) {
@@ -303,7 +206,7 @@
       // Delete function
       function alDelete(id){
         console.log(id);
-        var path = "categories/" + id;
+        var path = "{{ asset('admin/size') }}"+"/" + id;
         swal({
           title: "Bạn có chắc muốn xóa?",
         // text: "Bạn sẽ không thể khôi phục lại bản ghi này!!",
@@ -324,7 +227,7 @@
 
               if(!res.error) {
                 toastr.success('Xóa thành công!');
-                $('#category-'+id).remove();
+                $('#color-'+id).remove();
                   //setTimeout(function () {
                     //location.reload();
                   //}, 1000)

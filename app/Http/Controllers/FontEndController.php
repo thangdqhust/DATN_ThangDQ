@@ -49,22 +49,49 @@ class FontEndController extends Controller
         return $request;
     }
     public function getColor(Request $request){
-        $data= $request['code'];
-        $colors=Product_detail::where('product_id',$data)->get();
+        $i=0;
+        $data=[];
+        $code= $request['code'];
+        $colors=Product_detail::where('product_id',$code)->get();
         foreach ($colors as $key => $value) {
             $transport=Color::where('id',$value['color_id'])->first();
-            $colors[$key]=$transport;
+            $color['color']=$transport['color'];
+            $boolean="true";
+            foreach ($data as $k => $element) {
+                if ($color['color']==$element['color']) {
+                    $boolean="false";
+                    break;
+                }
+            }
+                if ($boolean=="true") {
+                 $data[$i]=$color;
+                $i++;
+                }
         }
-        return $colors;
+        return $data;
     }
     public function getSize(Request $request){
-        $data= $request['code'];
-        $sizes=Product_detail::where('product_id',$data)->get();
+        $i=0;
+        $data=[];
+        $code= $request['code'];
+        $sizes=Product_detail::where('product_id',$code)->get();
         foreach ($sizes as $key => $value) {
             $transport=Size::where('id',$value['size_id'])->first();
-            $sizes[$key]=$transport;
+            $size['size']=$transport['size'];
+            $boolean="true";
+            foreach ($data as $k => $element) {
+                if ($size['size']==$element['size']) {
+                    $boolean="false";
+                    break;
+                }
+            }
+            if ($boolean=="true") {
+                 $data[$i]=$size;
+                $i=$i+1;
+            }
+
         }
-        return $sizes;
+        return $data;
     }
      public function getColor_one(Request $request){
         $id=$request['id'];

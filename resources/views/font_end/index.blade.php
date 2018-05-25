@@ -289,4 +289,5 @@
 @endsection
 @section('js')
 <script src="{{ asset('js') }}/custom.js"></script>	
+<script src="{{ asset('js') }}/js-index-01.js"></script>
 @endsection

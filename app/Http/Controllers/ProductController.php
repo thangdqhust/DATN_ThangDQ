@@ -4,23 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use Yajra\Datatables\Datatables;
 use App\Product;
 use App\Vendor;
 use App\Product_detail;
 use App\User;
+use App\Category;
 use App\Gallary_image;
 use App\Size;
 use App\Color;
+use Auth;
 class ProductController extends Controller
 {
     public function index(){
-    	$currentUser= User::first();
-    	$products= Product::get();
+    	$currentUser= Auth::user();
+        $products= Product::get();
+        $categories= Category::get();
+        $vendors= Vendor::get();
+        $colors= Color::get();
+    	$sizes= Size::get();
     	// dd($currentUser);
     	$sumNotice="0";
     	$sumPost="0";
-    	return view('products.index',['currentUser'=>$currentUser,'sumNotice'=>$sumNotice,'sumPost'=>$sumPost],['products'=>$products]);
+    	return view('products.index',['currentUser'=>$currentUser,'sumNotice'=>$sumNotice,'sumPost'=>$sumPost],['products'=>$products,'categories'=>$categories,'vendors'=>$vendors,'sizes'=>$sizes,'colors'=>$colors,]);
     }
     public function anyData(){
             // return Datatables::of(User::query())->make(true);
@@ -35,7 +42,7 @@ class ProductController extends Controller
         return Datatables::of($products)
         ->addColumn('action', function ($product) {
             return'
-            <a type="button" class="btn btn-xs btn-success fa fa-plus" href="users/'.$product['slug'].'" ></a> 
+            <button type="button" class="btn btn-xs btn-success fa fa-plus" data-toggle="modal" href="#wareHousing" onclick="wareHousing('.$product['id'].')" ></button>
             <button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#showProduct"><i class="fa fa-eye" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('.$product['id'].')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('.$product['id'].')"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -78,12 +85,12 @@ class ProductController extends Controller
     }
     
     public function store(ProductRequest $request) {
-        $vendor=$request->only(['vendor']);
+        $vendor=$request->only(['vendor_id']);
         $codeVendor=Vendor::where('id',$vendor)->first();
-        $data=$request->only(['name','description','content','sale_cost','origin_cost']);
+        $data=$request->only(['name','description','content','sale_cost','origin_cost','category_id']);
         $data['code']=$codeVendor['code'].'0'.time();
         $data['slug']=str_slug($data['name']);
-        $data['vendor']=$codeVendor['id'];
+        $data['vendor_id']=$codeVendor['id'];
         $product=Product::create($data);
         foreach ($request['images'] as $key => $image) {
             $imageName= 'http://'.request()->getHttpHost().'/images/product/'.time().$key.'.'.$image->getClientOriginalExtension();
@@ -94,35 +101,31 @@ class ProductController extends Controller
         $data=Gallary_image::create($gallary);
         }
         return $product;
-        // $data['code']=$codeVendor.''
-        // $data['user_id'] = Auth::user()->id;
-        // unset($data['image']);
-        // unset($data['tags']);
-        // $data['image']=$imageName;
-         // return $user;
-        // return redirect()->back();
     
     }
-    public function updateProduct(ProductRequest $request) {
+    public function updateProduct(ProductUpdateRequest $request) {
         $id=$request->only(['id']);
-        $vendor=$request->only(['vendor']);
+        $vendor=$request->only(['vendor_id']);
         $codeVendor=Vendor::where('id',$vendor)->first();
-        $data=$request->only(['name','description','content','sale_cost','origin_cost']);
-        $data['slug']=str_slug($data['name']);
-        $data['vendor']=$codeVendor['id'];
+        $data=$request->only(['name','description','content','sale_cost','origin_cost','category_id']);
+        $data['slug']=str_slug($data['name']).time();
+        $data['vendor_id']=$codeVendor['id'];
         $boolean=Product::where('id',$id)->update($data);
         if ($boolean) {
         return Product::find($id)->first();
         }else{
             return response()->json(['error'=>'500']);
         }
-        foreach ($request['images'] as $key => $image) {
-            $imageName= request()->getHttpHost().'/images/product/'.time().$key.'.'.$image->getClientOriginalExtension();
+        if (!isempty($request['images'])) {
+            # code...
+            foreach ($request['images'] as $key => $image) {
+                $imageName= request()->getHttpHost().'/images/product/'.time().$key.'.'.$image->getClientOriginalExtension();
 
-        $image->move(public_path('images/product'), $imageName);
-        $gallary['link']=$imageName;
-        $gallary['product_id']=$product['id'];
-        $data=Gallary_image::create($gallary);
+            $image->move(public_path('images/product'), $imageName);
+            $gallary['link']=$imageName;
+            $gallary['product_id']=$product['id'];
+            $data=Gallary_image::create($gallary);
+            }
         }
         $boolean=Post::find($id)->first()->update($data);
         if ($boolean) {

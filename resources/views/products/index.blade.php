@@ -36,34 +36,6 @@
         <th>Action</th>
       </tr>
     </thead>
-    {{-- <tbody>
-      @php $count=1 @endphp
-      @foreach($products as $product)
-      <tr id="user_{{$product['id']}}">
-
-        <td>{{$count++}}</td>
-        <td><img src="{{$product['image']}}" class="img img-responsive" width="200px" alt=""></td>
-        <td>{{$product['title']}}</td>
-        <td>{!! $product['updated_at']->diffForHumans() !!}</td>
-        <td> @if($product['status']==0)
-         <a href="#" class="btn btn-info"> Browsing</a>
-         @endif
-         @if($product['status']==1)
-         <a href="#" class="btn btn-success"> Posted</a>
-         @endif
-         @if($product['status']==2)
-         <a href="#" class="btn btn-danger"> Cancelled</a><br><br>
-         <a href="javascript:;" onclick="getReason({{$product['id']}})" data-toggle="modal" data-target="#reason" class="btn btn-warning fa fa-exclamation-circle"> Reason</a>
-         @endif</td>
-        <td>
-          <a href="javascript:;" onclick="editProduct({{$product['id']}})" class="btn btn-success" data-toggle="modal" data-target="#editProduct" ><i class="fa fa-wrench"></i> Repair </a>
-         <br>
-         <br>
-         <a  class="btn btn-danger fa fa-trash-o" onclick="alDelete({{$product['id']}})" type="submit"> Delete</a>
-       </td>
-     </tr>
-     @endforeach
-   </tbody> --}}
  </table>
 </div>
 <!-- modal add product -->
@@ -90,32 +62,42 @@
       <div class="form-group">
         <label for="">Vendor</label>
         <select name="vendor" id="vendor" class="form-control" >
-          <option value="1" selected>Vũ Thắng</option>
-        </select>
-      </div>
-      <div id="image_preview"></div>
-      <div class="form-group">
-        <label for="">Images</label>
-        <input type="file" id="files" class="form-control" name="file[]" multiple />
-      </div>
-
-    </div>                       
-    <div class="half-form">
-      <div class="form-group">
-        <label for="">Descripton</label>
-        <textarea name="description" id="description" class="form-control"></textarea>
-      </div>
-      <div class="form-group">
-        <label for="">Content</label>
-        <textarea name="content"></textarea>
-      </div>
-    </div>
-
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button type="button" id="StoreBtn" class="btn btn-primary">Save changes</button>
-    </div>
+         @foreach ($vendors as $vendor)
+         <option value="{{$vendor['id']}}" selected>{{$vendor['name']}}</option>
+         @endforeach
+       </select>
+     </div>
+     <div class="form-group">
+      <label for="">Category</label>
+      <select name="category" id="category_id" class="form-control" >
+       @foreach ($categories as $category)
+       <option value="{{$category['id']}}" selected>{{$category['name']}}</option>
+       @endforeach
+     </select>
+   </div>
+   <div id="image_preview"></div>
+   <div class="form-group">
+    <label for="">Images</label>
+    <input type="file" id="files" class="form-control" name="file[]" multiple />
   </div>
+
+</div>                       
+<div class="half-form">
+  <div class="form-group">
+    <label for="">Descripton</label>
+    <textarea name="description" id="description" class="form-control"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="">Content</label>
+    <textarea name="content"></textarea>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+  <button type="button" id="StoreBtn" class="btn btn-primary">Save changes</button>
+</div>
+</div>
 </div>
 </div>
 {{-- edit product modal  --}}
@@ -143,7 +125,17 @@
       <div class="form-group">
         <label for="">Vendor</label>
         <select name="vendor" id="evendor" class="form-control" >
-          <option value="1" selected>Vũ Thắng</option>
+          @foreach ($vendors as $vendor)
+          <option value="{{$vendor['id']}}" selected>{{$vendor['name']}}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="">Category</label>
+        <select name="category" id="ecategory_id" class="form-control" >
+          @foreach ($categories as $category)
+          <option value="{{$category['id']}}" selected>{{$category['name']}}</option>
+          @endforeach
         </select>
       </div>
       <div id="eimage_preview">
@@ -177,54 +169,127 @@
 
                          Model Plus Data
 
-         ################################################ --}}
-  <div class="modal fade" id="plusData">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Modal title</h4>
-        </div>
-        <div class="modal-body">
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-@endsection
+                         ################################################ --}}
+                         <div class="modal fade" id="plusData">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Modal title</h4>
+                              </div>
+                              <div class="modal-body">
 
-@section('js')
-<script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
-<script>
-  CKEDITOR.replace( 'content' );
-  CKEDITOR.replace( 'econtent' );
-</script>
-<script>
-  $(function() {
-    $('#users-table').DataTable({
-      processing: true,
-      serverSide: true,
-      ajax: '{!! route('datatables.data') !!}',
-      columns: [
-      { data: 'id', name: 'id' },
-      { data: 'code', name: 'code' },
-      { data: 'name', name: 'name' },
-      { data: 'origin_cost', name: 'origin_cost' },
-      { data: 'sale_cost', name: 'sale_cost' },
-      { data: 'updated_at', name: 'updated_at' },
-      { data: 'action', name: 'action' },
-      ]
-    });
-  });
-</script>
-<script>
-  CKEDITOR.replace( 'content' );
-  CKEDITOR.replace( 'econtent' );
-  CKEDITOR.editorConfig = function( config ) {
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+  {{-- ################################################
+
+                         Model WareHousing
+
+                         ################################################ --}}
+                         <div class="modal fade" id="wareHousing">
+                          <div class="modal-dialog" style="width: 50%;">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="productTitle"></h4>
+                              </div>
+                              <div class="container">
+
+                                <a class="btn btn-primary" data-toggle="modal" href='#AddWareHousing'>+Add</a>
+                              </div>
+                              <div class="modal-body" id="allWareHousing">
+
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {{-- ################################################
+
+                         Model WareHousing
+
+                         ################################################ --}}
+
+                         <div class="modal fade" id="AddWareHousing">
+                          <div class="modal-dialog" style="width: 50%;">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Modal title</h4>
+                              </div>
+                              <div class="modal-body">
+
+                                <div class="form-group">
+                                  <label for="">Color</label>
+                                  <select name="color" id="color_id" class="form-control" >
+                                    @foreach ($colors as $color)
+                                    <option value="{{$color['id']}}" selected>{{$color['color']}}</option>
+                                    @endforeach
+                                  </select>
+                                </div>
+
+                                <div class="form-group">
+                                  <label for="">Size</label>
+                                  <select name="color" id="size_id" class="form-control" >
+                                    @foreach ($sizes as $size)
+                                    <option value="{{$size['id']}}" selected>{{$size['size']}}</option>
+                                    @endforeach
+                                  </select>
+                                </div>
+                                <div class="form-group">
+                                  <label for="">Quantity  </label>
+                                    <input type="text" id="quantity" class="form-control">
+                                </div>
+                                <input type="hidden" id="product_id">
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="storeWareHousing">Save changes</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <input type="hidden" id="codeWareHousing" value="">
+                        @endsection
+
+                        @section('js')
+                        <script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
+                        <script>
+                          CKEDITOR.replace( 'content' );
+                          CKEDITOR.replace( 'econtent' );
+                        </script>
+                        <script>
+                          $(function() {
+                            $('#users-table').DataTable({
+                              processing: true,
+                              serverSide: true,
+                              ajax: '{!! route('datatables.data') !!}',
+                              columns: [
+                              { data: 'id', name: 'id' },
+                              { data: 'code', name: 'code' },
+                              { data: 'name', name: 'name' },
+                              { data: 'origin_cost', name: 'origin_cost' },
+                              { data: 'sale_cost', name: 'sale_cost' },
+                              { data: 'updated_at', name: 'updated_at' },
+                              { data: 'action', name: 'action' },
+                              ]
+                            });
+                          });
+                        </script>
+                        <script>
+                          CKEDITOR.replace( 'content' );
+                          CKEDITOR.replace( 'econtent' );
+                          CKEDITOR.editorConfig = function( config ) {
         // Define changes to default configuration here. For example:
         // config.language = 'fr';
         // config.uiColor = '#AADC6E';
@@ -262,7 +327,8 @@
           newPost.append('name',$('#name').val());
           newPost.append('description',$('#description').val());
           newPost.append('content',content);
-          newPost.append('vendor',$('#vendor').val());
+          newPost.append('vendor_id',$('#vendor').val());
+          newPost.append('category_id',$('#category_id').val());
           newPost.append('sale_cost',$('#sale_cost').val());
           newPost.append('origin_cost',$('#origin_cost').val());
           
@@ -295,7 +361,7 @@
                 '<td>'+response.sale_cost+'</td>'+
                 '<td>'+response.updated_at+'</td>'+
                 '<td>'+
-                '<button type="button" class="btn btn-xs btn-success fa fa-plus" onclick="plusData('+response.id+')" data-toggle="modal" href="#plusData"></button> '+
+                '<button type="button" class="btn btn-xs btn-success fa fa-plus" data-toggle="modal" href="#wareHousing" onclick="wareHousing('+response.id+')" ></button>'+
                 '<button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#showProduct"><i class="fa fa-eye" aria-hidden="true"></i></button> '+
                 ' <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response.id+')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button> '+
                 ' <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('+response.id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+
@@ -364,7 +430,8 @@ $('#UpdateBtn').on('click',function(e){
   updatePost.append('name',$('#ename').val());
   updatePost.append('description',$('#edescription').val());
   updatePost.append('content',econtent);
-  updatePost.append('vendor',$('#evendor').val());
+  updatePost.append('vendor_id',$('#evendor').val());
+  updatePost.append('category_id',$('#ecategory_id').val());
   updatePost.append('sale_cost',$('#esale_cost').val());
   updatePost.append('origin_cost',$('#eorigin_cost').val());
   console.log(updatePost);
@@ -397,7 +464,7 @@ $('#UpdateBtn').on('click',function(e){
         '<td>'+response.sale_cost+'</td>'+
         '<td>'+response.updated_at+'</td>'+
         '<td>'+
-        '<button type="button" class="btn btn-xs btn-success fa fa-plus" onclick="plusData('+response.id+')" data-toggle="modal" href="#plusData"></button> '+
+        '<button type="button" class="btn btn-xs btn-success fa fa-plus" data-toggle="modal" href="#wareHousing" onclick="wareHousing('+response.id+')" ></button>'+
         '<button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#showProduct"><i class="fa fa-eye" aria-hidden="true"></i></button> '+
         ' <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response.id+')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button> '+
         ' <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('+response.id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+
@@ -408,38 +475,38 @@ $('#UpdateBtn').on('click',function(e){
         if (!checkNull(xhr.responseJSON)) {
 
 
-        if(!checkNull(xhr.responseJSON.errors.name))
-        { 
-          for (var i = 0; i < xhr.responseJSON.errors.name.length; i++) {
-            var html='<p class="sperrors" style="color:red">'+xhr.responseJSON.errors.name[i]+'</p>';
-            $(html).insertAfter('#ename');
+          if(!checkNull(xhr.responseJSON.errors.name))
+          { 
+            for (var i = 0; i < xhr.responseJSON.errors.name.length; i++) {
+              var html='<p class="sperrors" style="color:red">'+xhr.responseJSON.errors.name[i]+'</p>';
+              $(html).insertAfter('#ename');
 
-          }
-        };
-        if(!checkNull(xhr.responseJSON.errors.content))
-        {
-          for (var i = 0; i < xhr.responseJSON.errors.content.length; i++) {
-            var html='<p class="sperrors" style="color:red">'+xhr.responseJSON.errors.content[i]+'</p>';
-            $(html).insertAfter('#econtentdiv');
+            }
+          };
+          if(!checkNull(xhr.responseJSON.errors.content))
+          {
+            for (var i = 0; i < xhr.responseJSON.errors.content.length; i++) {
+              var html='<p class="sperrors" style="color:red">'+xhr.responseJSON.errors.content[i]+'</p>';
+              $(html).insertAfter('#econtentdiv');
 
-          }
-        };
-        if(!checkNull(xhr.responseJSON.errors.description))
-        {
-          for (var i = 0; i < xhr.responseJSON.errors.description.length; i++) {
-            var html='<p  class="sperrors" style="color:red">'+xhr.responseJSON.errors.description[i]+'</p>';
-            $(html).insertAfter('#edescription');
+            }
+          };
+          if(!checkNull(xhr.responseJSON.errors.description))
+          {
+            for (var i = 0; i < xhr.responseJSON.errors.description.length; i++) {
+              var html='<p  class="sperrors" style="color:red">'+xhr.responseJSON.errors.description[i]+'</p>';
+              $(html).insertAfter('#edescription');
 
-          }
-        };
-        if(!checkNull(xhr.responseJSON.errors.sale_cost))
-        {
-          for (var i = 0; i < xhr.responseJSON.errors.sale_cost.length; i++) {
-            var html='<p class="sperrors" style="color:red">'+xhr.responseJSON.errors.sale_cost[i]+'</p>';
-            $(html).insertAfter('#etag');
+            }
+          };
+          if(!checkNull(xhr.responseJSON.errors.sale_cost))
+          {
+            for (var i = 0; i < xhr.responseJSON.errors.sale_cost.length; i++) {
+              var html='<p class="sperrors" style="color:red">'+xhr.responseJSON.errors.sale_cost[i]+'</p>';
+              $(html).insertAfter('#etag');
 
-          }
-        };
+            }
+          };
         };
 
       },
@@ -448,21 +515,21 @@ $('#UpdateBtn').on('click',function(e){
 });
 })
 
-  function plusData(id) {$.ajax({
-          type: "GET",
-          url: "product/plus/"+id,
+function plusData(id) {$.ajax({
+  type: "GET",
+  url: "product/plus/"+id,
 
-          success: function(response)
-          {
+  success: function(response)
+  {
 
-          console.log(response);     
-         },
-         error: function (xhr, ajaxOptions, thrownError) {
-          toastr.error(thrownError);
-        }
-      });
+    console.log(response);     
+  },
+  error: function (xhr, ajaxOptions, thrownError) {
+    toastr.error(thrownError);
+  }
+});
 
-      }
+}
 
   // get data for form update
   function getProduct(id) {
@@ -471,7 +538,7 @@ $('#UpdateBtn').on('click',function(e){
 
         $.ajax({
           type: "GET",
-          url: "getProduct/"+id,
+          url: "{{ asset('admin/getProduct') }}/"+id,
 
           success: function(response)
           {
@@ -481,7 +548,8 @@ $('#UpdateBtn').on('click',function(e){
             $('#edescription').val(response.description);
             $("#esale_cost").val(response.sale_cost);
             $('#eorigin_cost').val(response.origin_cost);
-            $('#evendor').val(response.vendor);
+            $('#evendor').val(response.vendor_id);
+            $('#ecategory_id').val(response.category_id);
             $('#eid').val(response.id);
             for (var i = 0; i < response.images.length; i++) {
              html="<img src='"+response.images[i].link+"' class='img-responsive img' style='display:inline-block;width:50px'>";
@@ -494,8 +562,107 @@ $('#UpdateBtn').on('click',function(e){
       });
 
       }
-      // Update function
+      $('#storeWareHousing').on('click',function(){
+         $.ajax({
+          type: "post",
+          url: "{{ asset('admin/wareHousing/storewareHousing') }}",
+          data:{
+            product_id:$('#product_id').val(),
+            color_id:$('#color_id').val(),
+            quantity:$('#quantity').val(),
+            size_id:$('#size_id').val(),
+          },
+          success: function(response)
+          {
+            console.log(response);
+             $('#AddWareHousing').modal('hide');
+              var html=
+              '<table class="table table-bordered">'+ 
+              '<thead>'+
+              '<tr>'+
+              '<th>ID</th>'+
+              '<th>Color</th>'+
+              '<th>Size</th>'+
+              '<th>Quantity</th>'+
+              '<th>Action</th>'+
+              '</tr>'+
+              '</thead>'
+              +'<tbody>';
+              var tbody="";
+              for (var i = 0; i < response.length; i++) {
+               tbody=tbody+'<tr id="wareHousing-'+response[1][i].id+'">'+'<td>'+response[i].id+'</td>'+ 
+               '<td>'+response[i].color_id+'</td>'+
+               '<td>'+response[i].size_id+'</td>'+ 
+               '<td>'+response[i].quantity+'</td>'+
+               '<td>'+
+               '<button type="button" class="btn btn-xs btn-success fa fa-plus" onclick="plusData('+response[i].id+')" data-toggle="modal" href="#wareHousing"></button> '+
+               ' <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response[i].id+')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button> '+
+               ' <button type="button" class="btn btn-xs btn-danger" onclick="wareHousingDelete('+response[i].id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+ 
+               '</tr>';
+             }
+             html=html+tbody+'</tbody>'+'</table>';
+             $('#allWareHousing').html(html);
+           
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          toastr.error(thrownError);
+        }
+      });
+
       
+      })
+      function wareHousing(id) {
+        // $('#editPost').modal('show');
+            $('#product_id').val(id);
+
+        $.ajax({
+          type: "GET",
+          url: "wareHousing/"+id,
+          success: function(response)
+          {
+            var title=response[0].code+'-'+response[0].name;
+            $('#productTitle').html(title);
+            $('input#codeWareHousing').val(response[0].code);
+            if (!checkNull(response[1])) {
+              var html=
+              '<table class="table table-bordered">'+ 
+              '<thead>'+
+              '<tr>'+
+              '<th>ID</th>'+
+              '<th>Color</th>'+
+              '<th>Size</th>'+
+              '<th>Quantity</th>'+
+              '<th>Action</th>'+
+              '</tr>'+
+              '</thead>'
+              +'<tbody>';
+              var tbody="";
+              for (var i = 0; i < response[1].length; i++) {
+               tbody=tbody+'<tr id="wareHousing-'+response[1][i].id+'">'+'<td>'+response[1][i].id+'</td>'+ 
+               '<td>'+response[1][i].color_id+'</td>'+
+               '<td>'+response[1][i].size_id+'</td>'+ 
+               '<td>'+response[1][i].quantity+'</td>'+
+               '<td>'+
+               '<button type="button" class="btn btn-xs btn-success fa fa-plus" onclick="plusData('+response[1][i].id+')" data-toggle="modal" href="#wareHousing"></button> '+
+               ' <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response[1][i].id+')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button> '+
+               ' <button type="button" class="btn btn-xs btn-danger" onclick="wareHousingDelete('+response[1][i].id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+ 
+               '</tr>';
+             }
+             html=html+tbody+'</tbody>'+'</table>';
+             $('#allWareHousing').html(html);
+           }else{
+            var html='<h2>Chưa Có Sản Phẩm Nào Đang Tồn Kho</h2>';
+            $('#allWareHousing').html(html);
+          }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          toastr.error(thrownError);
+        }
+      });
+
+      }
+    // Update function
+
 
       // Delete function
       function alDelete(id){
@@ -520,6 +687,42 @@ $('#UpdateBtn').on('click',function(e){
               if(!res.error) {
                 toastr.success('Xóa thành công!');
                 $('#product-'+id).remove();
+                  //setTimeout(function () {
+                    //location.reload();
+                  //}, 1000)
+                }
+              },
+              error: function (xhr, ajaxOptions, thrownError) {
+                toastr.error(thrownError);
+              }
+            });
+        } else {
+          toastr.error("Thao tác xóa đã bị huỷ bỏ!");
+        }
+      });
+      };
+      function wareHousingDelete(id){
+        swal({
+          title: "Bạn có chắc muốn xóa?",
+        // text: "Bạn sẽ không thể khôi phục lại bản ghi này!!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",  
+        cancelButtonText: "Không",
+        confirmButtonText: "Có",
+        // closeOnConfirm: false,
+      },
+      function(isConfirm) {
+        if (isConfirm) {
+          $.ajax({
+            type: "delete",
+            url: "wareHousingDelete/"+id,
+            success: function(res)
+            {
+
+              if(!res.error) {
+                toastr.success('Xóa thành công!');
+                $('#wareHousing-'+id).remove();
                   //setTimeout(function () {
                     //location.reload();
                   //}, 1000)

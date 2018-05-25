@@ -160,7 +160,7 @@
     newUser.append('image', file);
     $.ajax({
 
-      url:'{{asset('users/store')}}',
+      url:'{{asset('admin/users/store')}}',
       data:newUser,
       dataType:'json',
       async:false,
@@ -259,7 +259,7 @@ function checkNull(value){
        editUser.append('image', file);
        $.ajax({
 
-        url:'{{asset('users/update')}}',
+        url:'{{asset('admin/users/update')}}',
         data:editUser,
         dataType:'json',
         async:false,
@@ -332,7 +332,7 @@ function checkNull(value){
       function getProduct(id) {
         $.ajax({
           type: "GET",
-          url: "users/edit/" + id,
+          url: "{{ asset('admin/user/edit') }}"+"/"+ id,
 
           success: function(response){
             $('#ename').val(response.name);
@@ -362,7 +362,7 @@ function checkNull(value){
         // closeOnConfirm: false,
       },
       function(isConfirm) {
-        var path = "users/" + id;
+        var path = "{{ asset('admin/user') }}"+"/"+ id;
         if (isConfirm) {
           $.ajax({
             type: "delete",

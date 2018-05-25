@@ -3,8 +3,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
-class AuthController extends Controller
+use Auth;
+class LoginController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        // $this->middleware('admin.guest')->except('admin.logout');
+        $this->middleware('admin.guest')->except('admin.logout');
     }
      protected function guard()
     {

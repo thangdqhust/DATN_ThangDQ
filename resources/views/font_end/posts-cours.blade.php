@@ -85,6 +85,7 @@
 								<div class="pull-left"><span class="option-label">COLOR:</span>
 									<br><br>
 									<button type="button"   id="colorForProduct" style="border: 0px;background-color: #f5f5f5;line-height: 40px;width: 160px;text-align: center;border:1px solid black">Click For Choses Color</button>
+									<input type="hidden" id="setColor">
 								</div>
 								<div class="pull-right required">* Required Fields</div>
 							</div>
@@ -94,6 +95,7 @@
 							</div>
 							<br><br>
 							<button type="button" id="sizeForProduct" style="border: 0px;background-color: #f5f5f5;line-height: 40px;width: 160px;text-align: center;border:1px solid black">Click For Choses Size</button>
+							<input type="hidden" id="setSize">
 							
 							<div class="divider divider--sm"></div>
 							<div class="wrapper">
@@ -102,12 +104,12 @@
 									<!--  -->
 									<div class="number input-counter">
 										<span class="minus-btn"></span>
-										<input type="text" value="1" size="5"/>
+										<input type="text" id="quantity" value="1" size="5"/>
 										<span class="plus-btn"></span>
 									</div>
 									<!-- / -->
 								</div>
-								<div class="pull-left"><button type="submit" class="btn btn--ys btn--xxl"><span class="icon icon-shopping_basket"></span> Add to cart</button></div>
+								<div class="pull-left"><button type="submit" id="addTocart" class="btn btn--ys btn--xxl"><span class="icon icon-shopping_basket"></span> Add to cart</button></div>
 							</div>
 							<ul class="product-link">
 								<li class="text-right"><a href="#"><span class="icon icon-favorite_border  tooltip-link"></span><span class="text">Add to wishlist</span></a></li>
@@ -353,6 +355,8 @@
 					code:$('#codeProduct').val(),
 				},
 				success:function(response){
+					$('ul.options-swatch--color').remove();
+					$('ul.options-swatch--size').remove();
 					var html='<ul class="options-swatch options-swatch--color options-swatch--lg" style="padding:20px 0">';
 					for (var i = 0; i < response.length; i++) {
 						if (!(response[i].color=='black'||response[i].color=="brown")) {	
@@ -379,6 +383,9 @@
 					code:$('#codeProduct').val(),
 				},
 				success:function(response){
+					console.log(response);
+					$('ul.options-swatch--size').remove();
+					$('ul.options-swatch--color').remove();
 					var html='<ul class="options-swatch options-swatch--size options-swatch--lg" style="padding:20px 0">';
 					for (var i = 0; i < response.length; i++) {
 						var button='<li ><button type="button" style="height:40px;width:40px;padding:0px;"  onclick="choseSize('+response[i].id+')"><span class="swatch-label">'+response[i].size+'</span></button></li>';
@@ -517,7 +524,9 @@ function choseSize(id){
 
 
 
-
+$('#addTocart').on('click',function(){
+	console.log($('#quantity').val());
+})
 
 
 </script>

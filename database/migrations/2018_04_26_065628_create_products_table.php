@@ -22,7 +22,8 @@ class CreateProductsTable extends Migration
             $table->text('description');
             $table->text('content');
             $table->string('slug');
-            $table->string('vendor');
+            $table->string('vendor_id');
+            $table->integer('category_id');
             $table->timestamps();
         });
     }
