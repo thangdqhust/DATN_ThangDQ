@@ -10,6 +10,8 @@ use App\Size;
 use App\Product_detail;
 use App\Category;
 use App\Gallary_image;
+
+use Gloudemans\Shoppingcart\Facades\Cart;
 class FontEndController extends Controller
 {	
 	 public function index(){
@@ -24,7 +26,7 @@ class FontEndController extends Controller
     	return view('font_end.index',['products'=>$products,'categories'=>$categories]);
     }
     public function posts($slug){
-         $categories=Category::get();
+        $categories=Category::get();
         $products= Product::where('slug',$slug)->first();
         $mainImage=Gallary_image::where('product_id',$products['id'])->first();
         $img=Gallary_image::where('product_id',$products['id'])->get();
@@ -56,6 +58,7 @@ class FontEndController extends Controller
         foreach ($colors as $key => $value) {
             $transport=Color::where('id',$value['color_id'])->first();
             $color['color']=$transport['color'];
+            $color['id']=$transport['id'];
             $boolean="true";
             foreach ($data as $k => $element) {
                 if ($color['color']==$element['color']) {
@@ -78,6 +81,7 @@ class FontEndController extends Controller
         foreach ($sizes as $key => $value) {
             $transport=Size::where('id',$value['size_id'])->first();
             $size['size']=$transport['size'];
+            $size['id']=$transport['id'];
             $boolean="true";
             foreach ($data as $k => $element) {
                 if ($size['size']==$element['size']) {

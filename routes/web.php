@@ -11,7 +11,8 @@
 |
 */
 
-Route::get('addToCart', 'WareHousingController@addToCart');
+Route::post('addToCart', 'WareHousingController@addToCart');
+Route::post('createOrder', 'WareHousingController@createOrder');
 
 Route::get('/','FontEndController@index');
 Route::get('posts/{slug}', 'FontEndController@posts');

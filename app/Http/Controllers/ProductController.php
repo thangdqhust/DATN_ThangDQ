@@ -56,6 +56,8 @@ class ProductController extends Controller
         //->editColumn('brand_id', 'tung{{$category_id}}')
         //->editColumn('category_id', Category::where('id', '=',$category_id)->first()->name)
         ->setRowId('product-{{$id}}')
+        ->editColumn('sale_cost', '{{ number_format($sale_cost)}}')
+        ->editColumn('origin_cost', '{{ number_format($origin_cost)}}')
         // ->rawColumns(['action'])
         ->make(true);
 }

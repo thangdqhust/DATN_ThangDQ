@@ -288,6 +288,22 @@
 
 @endsection
 @section('js')
+<script src="{{ asset('js') }}/jquery-2.1.4.min.js"></script> 
+		<!-- Bootstrap 3--> 
+		<script src="{{ asset('js') }}/bootstrap.min.js"></script> 
+		<!-- Specific Page External Plugins --> 
+		<script src="{{ asset('js') }}/slick.min.js"></script>
+		<script src="{{ asset('js') }}/bootstrap-select.min.js"></script>  
+		<script src="{{ asset('js') }}/jquery.plugin.min.js"></script> 
+		<script src="{{ asset('js') }}/jquery.countdown.min.js"></script>  		
+		<script src="{{ asset('js') }}/instafeed.min.js"></script>  		
+		<script src="{{ asset('js') }}/jquery.magnific-popup.min.js"></script>  		
+		<script src="{{ asset('js') }}/isotope.pkgd.min.js"></script> 
+		<script src="{{ asset('js') }}/imagesloaded.pkgd.min.js"></script>
+		<script src="{{ asset('js') }}/jquery.colorbox-min.js"></script>
+		<!-- SLIDER REVOLUTION 4.x SCRIPTS  --> 
+		<script type="text/javascript" src="{{ asset('js') }}/jquery.themepunch.tools.min.js"></script> 
+		<script type="text/javascript" src="{{ asset('js') }}/jquery.themepunch.revolution.min.js"></script> 
 <script src="{{ asset('js') }}/custom.js"></script>	
 <script src="{{ asset('js') }}/js-index-01.js"></script>
 @endsection

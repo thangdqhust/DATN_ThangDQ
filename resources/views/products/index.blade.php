@@ -36,7 +36,7 @@
         <th>Action</th>
       </tr>
     </thead>
- </table>
+  </table>
 </div>
 <!-- modal add product -->
 <div class="modal fade" id="addProduct">
@@ -248,7 +248,7 @@
                                 </div>
                                 <div class="form-group">
                                   <label for="">Quantity  </label>
-                                    <input type="text" id="quantity" class="form-control">
+                                  <input type="text" id="quantity" class="form-control">
                                 </div>
                                 <input type="hidden" id="product_id">
                               </div>
@@ -563,57 +563,57 @@ function plusData(id) {$.ajax({
 
       }
       $('#storeWareHousing').on('click',function(){
-         $.ajax({
-          type: "post",
-          url: "{{ asset('admin/wareHousing/storewareHousing') }}",
-          data:{
-            product_id:$('#product_id').val(),
-            color_id:$('#color_id').val(),
-            quantity:$('#quantity').val(),
-            size_id:$('#size_id').val(),
-          },
-          success: function(response)
-          {
-            console.log(response);
-             $('#AddWareHousing').modal('hide');
-              var html=
-              '<table class="table table-bordered">'+ 
-              '<thead>'+
-              '<tr>'+
-              '<th>ID</th>'+
-              '<th>Color</th>'+
-              '<th>Size</th>'+
-              '<th>Quantity</th>'+
-              '<th>Action</th>'+
-              '</tr>'+
-              '</thead>'
-              +'<tbody>';
-              var tbody="";
-              for (var i = 0; i < response.length; i++) {
-               tbody=tbody+'<tr id="wareHousing-'+response[1][i].id+'">'+'<td>'+response[i].id+'</td>'+ 
-               '<td>'+response[i].color_id+'</td>'+
-               '<td>'+response[i].size_id+'</td>'+ 
-               '<td>'+response[i].quantity+'</td>'+
-               '<td>'+
-               '<button type="button" class="btn btn-xs btn-success fa fa-plus" onclick="plusData('+response[i].id+')" data-toggle="modal" href="#wareHousing"></button> '+
-               ' <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response[i].id+')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button> '+
-               ' <button type="button" class="btn btn-xs btn-danger" onclick="wareHousingDelete('+response[i].id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+ 
-               '</tr>';
-             }
-             html=html+tbody+'</tbody>'+'</table>';
-             $('#allWareHousing').html(html);
-           
+       $.ajax({
+        type: "post",
+        url: "{{ asset('admin/wareHousing/storewareHousing') }}",
+        data:{
+          product_id:$('#product_id').val(),
+          color_id:$('#color_id').val(),
+          quantity:$('#quantity').val(),
+          size_id:$('#size_id').val(),
         },
-        error: function (xhr, ajaxOptions, thrownError) {
-          toastr.error(thrownError);
-        }
-      });
+        success: function(response)
+        {
+          console.log(response);
+          $('#AddWareHousing').modal('hide');
+          var html=
+          '<table class="table table-bordered">'+ 
+          '<thead>'+
+          '<tr>'+
+          '<th>ID</th>'+
+          '<th>Color</th>'+
+          '<th>Size</th>'+
+          '<th>Quantity</th>'+
+          '<th>Action</th>'+
+          '</tr>'+
+          '</thead>'
+          +'<tbody>';
+          var tbody="";
+          for (var i = 0; i < response.length; i++) {
+           tbody=tbody+'<tr id="wareHousing-'+response[1][i].id+'">'+'<td>'+response[i].id+'</td>'+ 
+           '<td>'+response[i].color_id+'</td>'+
+           '<td>'+response[i].size_id+'</td>'+ 
+           '<td>'+response[i].quantity+'</td>'+
+           '<td>'+
+           '<button type="button" class="btn btn-xs btn-success fa fa-plus" onclick="plusData('+response[i].id+')" data-toggle="modal" href="#wareHousing"></button> '+
+           ' <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response[i].id+')" href="#editProduct"><i class="fa fa-pencil" aria-hidden="true"></i></button> '+
+           ' <button type="button" class="btn btn-xs btn-danger" onclick="wareHousingDelete('+response[i].id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+ 
+           '</tr>';
+         }
+         html=html+tbody+'</tbody>'+'</table>';
+         $('#allWareHousing').html(html);
+         
+       },
+       error: function (xhr, ajaxOptions, thrownError) {
+        toastr.error(thrownError);
+      }
+    });
 
-      
-      })
+       
+     })
       function wareHousing(id) {
         // $('#editPost').modal('show');
-            $('#product_id').val(id);
+        $('#product_id').val(id);
 
         $.ajax({
           type: "GET",
@@ -760,6 +760,36 @@ function plusData(id) {$.ajax({
           }
         })
       }
-    </script>
+      $('#sale_cost').on('keypress', function(e){
+  return e.metaKey || // cmd/ctrl
+    e.which <= 0 || // arrow keys
+    e.which == 8 || // delete key
+    /[0-9]/.test(String.fromCharCode(e.which)); // numbers
+  })
+      $('#esale_cost').on('keypress', function(e){
+  return e.metaKey || // cmd/ctrl
+    e.which <= 0 || // arrow keys
+    e.which == 8 || // delete key
+    /[0-9]/.test(String.fromCharCode(e.which)); // numbers
+  })
+      $('#origin_cost').on('keypress', function(e){
+  return e.metaKey || // cmd/ctrl
+    e.which <= 0 || // arrow keys
+    e.which == 8 || // delete key
+    /[0-9]/.test(String.fromCharCode(e.which)); // numbers
+  })
+      $('#eorigin_cost').on('keypress', function(e){
+  return e.metaKey || // cmd/ctrl
+    e.which <= 0 || // arrow keys
+    e.which == 8 || // delete key
+    /[0-9]/.test(String.fromCharCode(e.which)); // numbers
+  })
+      $('#quantity').on('keypress', function(e){
+  return e.metaKey || // cmd/ctrl
+    e.which <= 0 || // arrow keys
+    e.which == 8 || // delete key
+    /[0-9]/.test(String.fromCharCode(e.which)); // numbers
+  })
+</script>
 
-    @endsection
+@endsection

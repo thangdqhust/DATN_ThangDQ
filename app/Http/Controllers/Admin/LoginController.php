@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
+use Illuminate\Http\Request;
 class LoginController extends Controller
 {
     /*
@@ -45,7 +46,7 @@ class LoginController extends Controller
         return view('adminauth.adminLogin');
     }
     public function logout(Request $request)
-    {
+    {  
         $this->guard('admin')->logout();
         // dd($request->session());
         // $request->session()->invalidate();

@@ -13,6 +13,7 @@ use App\Gallary_image;
 use App\Size;
 use App\Color;
 use Hash;
+use App\Order;
 use Gloudemans\Shoppingcart\Facades\Cart;
 class WareHousingController extends Controller
 {   
@@ -22,7 +23,7 @@ class WareHousingController extends Controller
         $data= Product::where('id',$id)->first();
         $result[0]= $data;
         if (!empty($data)) {
-        $detail= Product_detail::where('product_id',$data['code'])->orderBy('id','DESC')->get();
+            $detail= Product_detail::where('product_id',$data['code'])->orderBy('id','DESC')->get();
             # code...
             if (!$detail->isEmpty()) {
 
@@ -55,22 +56,22 @@ class WareHousingController extends Controller
             $xx=Product_detail::find($check['id'])->first()->update($data);
             $data=Product_detail::where('product_id',$check['product_id'])->orderBy('id','DESC')->get();
             foreach ($data as $key => $value) {
-                    $color=Color::where('id',$value['color_id'])->first();
-                    $size=Size::where('id',$value['size_id'])->first();
-                    $value['color_id']=$color['color'];
-                    $value['size_id']=$size['size'];
-                }
+                $color=Color::where('id',$value['color_id'])->first();
+                $size=Size::where('id',$value['size_id'])->first();
+                $value['color_id']=$color['color'];
+                $value['size_id']=$size['size'];
+            }
             return $data;
         }else{
             // return $detail;
             Product_detail::create($detail);
             $data=Product_detail::where('product_id',$detail['product_id'])->orderBy('id','DESC')->get();
             foreach ($data as $key => $value) {
-                    $color=Color::where('id',$value['color_id'])->first();
-                    $size=Size::where('id',$value['size_id'])->first();
-                    $value['color_id']=$color['color'];
-                    $value['size_id']=$size['size'];
-                }
+                $color=Color::where('id',$value['color_id'])->first();
+                $size=Size::where('id',$value['size_id'])->first();
+                $value['color_id']=$color['color'];
+                $value['size_id']=$size['size'];
+            }
             return $data;
         }
         
@@ -81,8 +82,24 @@ class WareHousingController extends Controller
         $data=Product_detail::find($id)->delete();
         return response()->json($data);
     }
-    public function addToCart(Request $request){
-            $a=Hash::make('123123');
-            dd($a);       
-    }
- }	
+    public function addToCart(Request $request)
+    {      
+        $code=$request['code'];
+        $size=$request['size'];
+        $color=$request['color'];
+        $quantity=$request['quantity'];
+        $product=Product::where('code',$code)->first();
+        $image=Gallary_image::where('product_id',$product['id'])->first();
+        $price=(int)$product['sale_cost']*(int)$quantity;
+        $cart = Cart::add(
+            $product['code'], $product['name'],$quantity, $price,
+            ['size' =>$size,'color' => $color,'image' => $image['link']]);
+        return $cart;
+}
+public function createOrder(Request $request)
+    {   $data =$request->only(['name','phone','email','address']);
+        $data['code']='UO'.time();
+        $order=Order::create($data);
+}   
+
+}	
