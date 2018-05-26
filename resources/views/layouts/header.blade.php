@@ -25,6 +25,9 @@
 	@yield('css')
 	<!-- Head Libs -->	
 	<!-- Modernizr -->
+	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css">
+  <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css">
 	<script src="{{ asset('js') }}/modernizr.js"></script>
 </head>
 <body class="index">				  
@@ -211,20 +214,19 @@
 									<ul id="cartCover">
 										<input type="hidden" id="flagOfCart" value="">
 										@foreach (Cart::content() as $element)
-										<li class="cart__item">
+										<li class="cart__item" id="row-{{$element->rowId}}">
 											<div class="cart__item__image pull-left">
 												<a href="#"><img src="{{$element->options['image']}}" alt=""/></a>
 											</div>
 
 											<div class="cart__item__control">
-												<div class="cart__item__delete"><a href="#" class="icon icon-delete"><span>Delete</span></a></div>
-												<div class="cart__item__edit"><a href="#" class="icon icon-edit"><span>Edit</span></a></div>
+												<div class="cart__item__delete"><a href="#" class=orderDelete rowId="{{$element->rowId}}" class="icon icon-delete"><span>Delete</span></a></div>
 											</div>
 											<div class="cart__item__info">
 												<div class="cart__item__info__title">
-													<h2><a href="#">{{ $element->options['size']}}</a></h2>
+													<h2><a href="#">{{ $element->name}}</a></h2>
 												</div>
-												<div class="cart__item__info__price"><span class="info-label">Price:</span><span>${{ $element->price}}</span></div>
+												<div class="cart__item__info__price"><span class="info-label">Price:</span><span>${{ number_format($element->price)}}</span></div>
 												<div class="cart__item__info__qty"><span class="info-label">Qty:</span><input type="text" class="input--ys" value='1' /></div>
 												<div class="cart__item__info__details">
 													<div class='multitooltip'>
@@ -243,6 +245,7 @@
 									<div class="cart__bottom">
 										<div class="cart__total">Cart subtotal: <span id="TotalOfCart">{{Cart::total()}}</span></div>
 										<button class="btn btn--ys btn-checkout" id="checkOut" data-toggle="modal" href='#checkOut-modal'>Checkout <span class="icon icon--flippedX icon-reply"></span></button>
+										<button class="btn btn--ys" id="deleteAll"><span class="icon icon-delete"></span>DELETE ALL ORDOR</button>
 									</div>
 								</div>
 							</div>
@@ -577,13 +580,28 @@
 <!-- jQuery 1.10.1--> 
 
 @yield('js')	
-<!-- Custom --> 
+<!-- Custom -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.js"></script> 
 <script>
+	$(function () {
+    $.ajaxSetup({
+
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+})
 	$('#cart-phone').on('keypress', function(e){
   return e.metaKey || // cmd/ctrl
     e.which <= 0 || // arrow keys
     e.which == 8 || // delete key
     /[0-9]/.test(String.fromCharCode(e.which)); // numbers
+})
+	$('#checkOut').on('click', function(e){
+  		e.preventDefault();
+		$('.open').removeClass('open');
+
 })
 	$('#createOrder').on('click',function(e){
 		e.preventDefault();
@@ -597,14 +615,96 @@
 				phone:$('#cart-phone').val(),
 			},
 			success:function(response){
-				console.log(response);
-				
+				toastr.success('Đặt hàng thành công!');
+				$('#checkOut-modal').modal('hide');
 			},error:function (xhr, ajaxOptions, thrownError) {
 				toastr.error(xhr.responseJSON.message);
 			}
 		});
 	})
-
+	$('.orderDelete').on('click',function(e){
+		e.preventDefault();
+		var id=$(this).attr('rowId');
+		console.log(id);
+		$('.open').removeClass('open');
+		var path = "{{ asset('orderDelete') }}/" + id;
+        swal({
+          title: "Bạn có chắc muốn xóa?",
+        // text: "Bạn sẽ không thể khôi phục lại bản ghi này!!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        cancelButtonText: "Không",
+        confirmButtonText: "Có",
+        // closeOnConfirm: false,
+      },
+      function(isConfirm) {
+        if (isConfirm) {
+          $.ajax({
+            type: "delete",
+            url: path,
+            success: function(res)
+            {
+              if(!res.error) {
+                toastr.success('Xóa thành công!');
+                $('#row-'+id).remove();
+                
+                $('#TotalOfCart').html(res);
+                  //setTimeout(function () {
+                    //location.reload();
+                  //}, 1000)
+                }
+              },
+              error: function (xhr, ajaxOptions, thrownError) {
+                toastr.error(thrownError);
+              }
+            });
+        } else {
+          toastr.error("Thao tác xóa đã bị huỷ bỏ!");
+        }
+      });
+	})
+	$('#deleteAll').on('click',function(e){
+		e.preventDefault();
+		$('.open').removeClass('open');
+		var path = "{{ asset('deleteAll') }}";
+        swal({
+          title: "Bạn có chắc muốn xóa?",
+        // text: "Bạn sẽ không thể khôi phục lại bản ghi này!!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        cancelButtonText: "Không",
+        confirmButtonText: "Có",
+        // closeOnConfirm: false,
+      },
+      function(isConfirm) {
+        if (isConfirm) {
+          $.ajax({
+            type: "delete",
+            url: path,
+            success: function(res)
+            {
+              if(!res.error) {
+                toastr.success('Xóa thành công!');
+                $('.cart__item').remove();
+                
+                $('#TotalOfCart').html(res);
+                  //setTimeout(function () {
+                    //location.reload();
+                  //}, 1000)
+                }
+              },
+              error: function (xhr, ajaxOptions, thrownError) {
+                toastr.error(thrownError);
+              }
+            });
+        } else {
+          toastr.error("Thao tác xóa đã bị huỷ bỏ!");
+        }
+      });
+	})
+	
 </script>
 
 </body>

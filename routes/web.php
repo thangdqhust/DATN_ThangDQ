@@ -13,13 +13,20 @@
 
 Route::post('addToCart', 'WareHousingController@addToCart');
 Route::post('createOrder', 'WareHousingController@createOrder');
+Route::delete('orderDelete/{id}', 'WareHousingController@orderDelete');
+Route::delete('deleteAll', 'WareHousingController@deleteAll');
 
 Route::get('/','FontEndController@index');
 Route::get('posts/{slug}', 'FontEndController@posts');
 
 Auth::routes();
 // Route::group(['prefix' => 'admin'], function() {
-Route::get('/home', 'HomeController@index')->name('home');
+Route::middleware('auth')->group(function(){
+Route::get('/orders', 'HomeController@index')->name('home');
+Route::get('userOder', 'HomeController@anyData')->name('userOder.data');
+Route::get('getOrder/{id}', 'HomeController@getOrder');
+Route::delete('deleteOrder/{id}', 'HomeController@deleteOrder');
+});
 
 
 

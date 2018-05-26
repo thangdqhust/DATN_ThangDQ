@@ -376,6 +376,8 @@
 					url:"{{ asset('getColor') }}",
 					data:{
 						code:$('#codeProduct').val(),
+						size:$('#setSize').val(),
+
 					},
 					success:function(response){
 						$('ul.options-swatch--color').remove();
@@ -404,6 +406,7 @@
 					url:"{{ asset('getSize') }}",
 					data:{
 						code:$('#codeProduct').val(),
+						color:$('#setColor').val(),
 					},
 					success:function(response){
 						console.log(response);
@@ -536,6 +539,7 @@ function choseSize(id){
 		url:"{{ asset('getSize-one') }}",
 		data:{
 			id:id,
+
 		},
 		success:function(response){
 			$('#sizeForProduct').html(response.size);
@@ -565,13 +569,12 @@ $('#addTocart').on('click',function(e){
 			console.log(response);
 			setTimeout(function () {
 				toastr.success('has been added');},1000);
-			
+			$('#row-'+response.rowId).remove();
 			var cart=				
-			'<li class="cart__item">'+
+			'<li class="cart__item" id=" row-'+response.rowId+'">'+
 			'<div class="cart__item__image pull-left"><a href="#"><img src="'+response.options.image+'" alt=""/></a></div>'+
 			'<div class="cart__item__control">'+
-			'<div class="cart__item__delete"><a href="#" class="icon icon-delete"><span>Delete</span></a></div>'+
-			'<div class="cart__item__edit"><a href="#" class="icon icon-edit"><span>Edit</span></a></div>'+
+			'<div class="cart__item__delete"><a href="#" class="icon icon-delete" class=orderDelete rowId="'+response.rowId+'" class="icon icon-delete"><span>Delete</span></a></div>'+
 			'</div>'+
 			'<div class="cart__item__info">'+
 			'<div class="cart__item__info__title">'+

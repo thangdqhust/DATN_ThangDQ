@@ -14,6 +14,7 @@ use App\Size;
 use App\Color;
 use Hash;
 use App\Order;
+use App\Order_detail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 class WareHousingController extends Controller
 {   
@@ -95,11 +96,36 @@ class WareHousingController extends Controller
             $product['code'], $product['name'],$quantity, $price,
             ['size' =>$size,'color' => $color,'image' => $image['link']]);
         return $cart;
-}
-public function createOrder(Request $request)
+    }
+    public function createOrder(Request $request)
     {   $data =$request->only(['name','phone','email','address']);
         $data['code']='UO'.time();
+        $total=Cart::total();
+        $total=explode('.', $total);
+        $data['total']=str_replace( ',', '', $total[0] );
         $order=Order::create($data);
-}   
+        foreach (Cart::content() as $key => $value) {
+            $color=Color::where('color',$value->options['color'])->first();
+            $size=Size::where('size',$value->options['size'])->first();
+            $detail=Product_detail::where('product_id',$value->id)->where('color_id',$color['id'])->where('size_id',$size['id'])->first();
+            $update['quantity']=(int)$detail['quantity']-(int)$value->qty;
+            Product_detail::where('id',$detail['id'])->update($update);
+            $orderDetail['order_id']=$order['id'];
+            $orderDetail['product_detail_id']=$detail['id'];
+            $orderDetail['product_id']=$value->id;
+            $orderDetail['quantity']=$value->qty;
+
+            Order_detail::create($orderDetail);
+        }
+       return response()->json('true'); 
+    }
+    public function orderDelete($id)
+    {   $data=Cart::remove($id);
+       return response()->json(Cart::total());
+    }  
+    public function deleteAll(Request $request)
+    {   $data=Cart::destroy();
+       return response()->json(Cart::total());
+    } 
 
 }	
