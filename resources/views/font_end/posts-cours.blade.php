@@ -99,7 +99,9 @@
 							<br><br>
 							<button type="button" id="sizeForProduct" style="border: 0px;background-color: #f5f5f5;line-height: 40px;width: 160px;text-align: center;border:1px solid black">Click For Choses Size</button>
 							<input type="hidden" id="setSize">
-							
+							<br><br>
+							<button type="button" id="reset" style="border: 0px;background-color: #f5f5f5;line-height: 20px;width: 60px;text-align: center;border:1px solid black">Reset</button>
+
 							<div class="divider divider--sm"></div>
 							<div class="wrapper">
 								<div class="pull-left"><span class="qty-label">QTY:</span></div>
@@ -597,12 +599,20 @@ $('#addTocart').on('click',function(e){
 			'</li>';
 			$(cart).insertAfter('#flagOfCart');
 			$('#TotalOfCart').html('$'+response.subtotal);
+			$('.badge--cart').html(response.count);
 		},error:function (xhr, ajaxOptions, thrownError) {
 			toastr.error(xhr.responseJSON.message);
 		}
 	});
 })
+$('#reset').on('click',function(){
+	$('#setSize').val("");
+	$('#setColor').val("");
+	$('#colorForProduct').css({"background":"white","color":"black"});
+	$('#colorForProduct').html("Click For Choses Color");
+	$('#sizeForProduct').html("Click For Choses Size");
 
+});
 
 </script>
 @endsection

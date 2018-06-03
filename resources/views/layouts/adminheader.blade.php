@@ -257,41 +257,40 @@
         <li class="header">MAIN NAVIGATION</li>
         <li>
           <a href="{{ asset('admin/products') }}">
-            <i class="fa fa-dashboard"></i> <span>Products</span>
-              <i class="fa fa-angle-left"></i>
+            <i class="fa fa-product-hunt"></i> <span>Products</span>
           </a>
         </li>
         <li>
           <a href="{{ asset('admin/categories') }}">
-            <i class="fa fa-dashboard"></i> <span>Category</span>
-              <i class="fa fa-angle-left"></i>
+            <i class="fa fa-bars"></i> <span>Category</span>
           </a>
         </li>
         <li>
           <a href="{{ asset('admin/users') }}">
-            <i class="fa fa-dashboard"></i> <span>Users</span>
-              <i class="fa fa-angle-left"></i>
+            <i class="fa fa-users"></i> <span>Users</span>
             </span>
           </a>
         </li>
         <li>
           <a href="{{ asset('admin/colors') }}">
             <i class="fa fa-dashboard"></i> <span>Colors</span>
-              <i class="fa fa-angle-left"></i>
             </span>
           </a>
         </li>
         <li>
           <a href="{{ asset('admin/sizes') }}">
-            <i class="fa fa-dashboard"></i> <span>Size</span>
-              <i class="fa fa-angle-left"></i>
+            <i class="fa fa-superpowers"></i> <span>Size</span>
             </span>
           </a>
         </li>
         <li>
           <a href="{{ asset('admin/vendors') }}">
-            <i class="fa fa-dashboard"></i> <span>Vendor</span>
-              <i class="fa fa-angle-left"></i>
+            <i class="fa fa-archive"></i> <span>Vendor</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ asset('admin/orders') }}">
+            <i class="fa fa-cart-arrow-down"></i> <span>Order</span>
           </a>
         </li>
       </ul>

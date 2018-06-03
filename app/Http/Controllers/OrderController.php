@@ -17,7 +17,7 @@ use Auth;
 use App\Order;
 use App\Order_detail;
 use Gloudemans\Shoppingcart\Facades\Cart;
-class HomeController extends Controller
+class OrderController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -35,7 +35,7 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $currentUser= Auth::user();
+        $currentUser= Auth::guard('admin')->user();
         $products= Product::get();
         $categories= Category::get();
         $vendors= Vendor::get();
@@ -44,14 +44,13 @@ class HomeController extends Controller
         // dd($currentUser);
         $sumNotice="0";
         $sumPost="0";
-        return view('ordersUser.index',['currentUser'=>$currentUser,'sumNotice'=>$sumNotice,'sumPost'=>$sumPost],['products'=>$products,'categories'=>$categories,'vendors'=>$vendors,'sizes'=>$sizes,'colors'=>$colors,]);
+        return view('orders.index',['currentUser'=>$currentUser,'sumNotice'=>$sumNotice,'sumPost'=>$sumPost],['products'=>$products,'categories'=>$categories,'vendors'=>$vendors,'sizes'=>$sizes,'colors'=>$colors,]);
     }
     public function anyData(){
-        $orders = Order::select('orders.*')->where('email',Auth::user()->email);
+        $orders = Order::select('orders.*');
         return Datatables::of($orders)
         ->addColumn('action', function ($order) {
             return'
-            <button type="button" class="btn btn-xs btn-plus" data-toggle="modal"  ><i class="fa fa-plus" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#wareHousing" onclick="wareHousing('.$order['id'].')" ><i class="fa fa-eye" aria-hidden="true"></i></button>
             <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('.$order['id'].')"><i class="fa fa-trash" aria-hidden="true"></i></button>
             ';
@@ -88,6 +87,7 @@ class HomeController extends Controller
     }
     
     public function deleteOrder($id){
+        $data=Order_detail::where('order_id',$id)->delete();
         $data=Order::find($id)->delete();
         return response()->json($data);
     }

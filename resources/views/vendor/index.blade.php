@@ -167,7 +167,7 @@
       newPost.append('address',$('#address').val());
       $.ajax({
         type:'post',
-        url:"{{ asset('admmin/vendor/store') }}",
+        url:"{{ asset('admin/vendor/store') }}",
         data:newPost,
         dataType:'json',
         async:false,

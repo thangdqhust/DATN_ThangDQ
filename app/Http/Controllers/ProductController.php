@@ -18,15 +18,25 @@ use Auth;
 class ProductController extends Controller
 {
     public function index(){
-    	$currentUser= Auth::user();
+    	$currentUser= Auth::guard('admin')->user();
         $products= Product::get();
         $categories= Category::get();
         $vendors= Vendor::get();
         $colors= Color::get();
     	$sizes= Size::get();
     	// dd($currentUser);
-    	$sumNotice="0";
-    	$sumPost="0";
+     //    $quantity=Product_detail::where('quantity','<=','0')->get();
+     //    $sumPost=Product_detail::where('quantity','<=','0')->count();
+     //    foreach ($quantity as $key => $value) {
+     //    $size=Size::where('id',$value['size_id'])->first();
+     //    $color=Color::where('id',$value['color_id'])->first();
+     //    $product[$key]=Product::where('code',$value['product_id'])->first();
+     //    $product[$key]['color']=$color;
+     //    $product[$key]['size']=$size;
+     //    }
+    	// $sumNotice=$product;
+        $sumPost="0";
+        $sumNotice="0";
     	return view('products.index',['currentUser'=>$currentUser,'sumNotice'=>$sumNotice,'sumPost'=>$sumPost],['products'=>$products,'categories'=>$categories,'vendors'=>$vendors,'sizes'=>$sizes,'colors'=>$colors,]);
     }
     public function anyData(){

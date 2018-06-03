@@ -15,6 +15,7 @@ use App\Color;
 use Hash;
 use App\Order;
 use App\Order_detail;
+use Illuminate\Support\Facades\Mail;
 use Gloudemans\Shoppingcart\Facades\Cart;
 class WareHousingController extends Controller
 {   
@@ -105,6 +106,7 @@ class WareHousingController extends Controller
         $data['total']=str_replace( ',', '', $total[0] );
         $order=Order::create($data);
         foreach (Cart::content() as $key => $value) {
+            $mail[$key]=$value;
             $color=Color::where('color',$value->options['color'])->first();
             $size=Size::where('size',$value->options['size'])->first();
             $detail=Product_detail::where('product_id',$value->id)->where('color_id',$color['id'])->where('size_id',$size['id'])->first();
@@ -116,7 +118,12 @@ class WareHousingController extends Controller
             $orderDetail['quantity']=$value->qty;
 
             Order_detail::create($orderDetail);
+
         }
+        Mail::send('emails.order',['product'=>$mail],function($mess) use($data){
+            $mess->subject('Dear,'.$data['name']);
+            $mess->to($data['email']);
+        });
        return response()->json('true'); 
     }
     public function orderDelete($id)

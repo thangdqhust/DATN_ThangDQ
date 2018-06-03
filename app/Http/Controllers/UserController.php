@@ -19,7 +19,7 @@ use Yajra\Datatables\Datatables;
 class UserController extends Controller
 {
     public function index(){
-        $currentUser= User::first();
+        $currentUser= Auth::guard('admin')->user();
     	$users= User::get();
     	// dd($currentUser);
     	$sumNotice="0";

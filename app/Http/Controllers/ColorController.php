@@ -10,7 +10,7 @@ use Yajra\Datatables\Datatables;
 class ColorController extends Controller
 {
     public function index(){
-     	$currentUser= Auth::user();
+        $currentUser= Auth::guard('admin')->user();
     	// dd($currentUser);
     	$sumNotice="0";
     	$sumPost="0";

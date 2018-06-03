@@ -7,11 +7,11 @@ use App\Vendor;
 use App\User;
 use App\Http\Requests\VendorRequest;
 use Yajra\Datatables\Datatables;
-
+use Auth;
 class VendorController extends Controller
 {
      public function index(){
-    	$currentUser= User::first();
+        $currentUser= Auth::guard('admin')->user();
     	$vendors= Vendor::get();
     	// dd($currentUser);
     	$sumNotice="0";

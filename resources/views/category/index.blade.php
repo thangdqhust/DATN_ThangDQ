@@ -155,7 +155,7 @@
                 },1000);
                 // var data = JSON.parse(response).data;
                 var html=
-                '<tr id="category_'+response.id+'">'+
+                '<tr id="category-'+response.id+'">'+
                 '<td>'+response.id+'</td>'+
                 '<td>'+response.name+'</td>'+
                 '<td>'+response.parent_id+'</td>'+

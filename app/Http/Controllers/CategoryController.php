@@ -11,7 +11,7 @@ use App\User;
 class CategoryController extends Controller
 {
      public function index(){
-     	$currentUser= User::first();
+        $currentUser= Auth::guard('admin')->user();
     	$categories= Category::get();
     	// dd($currentUser);
     	$sumNotice="0";

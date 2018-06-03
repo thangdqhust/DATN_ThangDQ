@@ -104,6 +104,10 @@ Route::delete('deleteOrder/{id}', 'HomeController@deleteOrder');
 
                 // Route::post('users/{slug}', 'UserController@manageUser');
 
+                Route::get('orders', 'OrderController@index')->name('home');
+                Route::get('adminorder', 'OrderController@anyData')->name('adminOder.data');
+                Route::get('getOrder/{id}', 'OrderController@getOrder');
+                Route::delete('deleteOrder/{id}', 'OrderController@deleteOrder');
 
                 // });
 

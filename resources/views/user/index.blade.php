@@ -183,9 +183,9 @@
                 '<td>'+response.phone+'</td>'+
                 '<td>'+response.address+'</td>'+
                 '<td>'+
-                '<button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#showProduct"><i class="fa fa-eye" aria-hidden="true"></i></button>'+
-                '<button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response.id+')" href="#editUser"><i class="fa fa-pencil" aria-hidden="true"></i></button>'+
-                '<button type="button" class="btn btn-xs btn-danger" onclick="alDelete('+response.id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+
+                '<button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#showProduct"><i class="fa fa-eye" aria-hidden="true"></i></button> '+
+                ' <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('+response.id+')" href="#editUser"><i class="fa fa-pencil" aria-hidden="true"></i></button> '+
+                ' <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('+response.id+')"><i class="fa fa-trash" aria-hidden="true"></i></button>'+
                 '</td>'+
                 '</tr>';
                 $('tbody').prepend(html);

@@ -201,11 +201,13 @@
 					</div>
 					<!-- account menu end -->
 					<!-- shopping cart start -->
+
 					<div class="cart link-inline">
 						<div class="dropdown text-right">
 							<a class="dropdown-toggle">
 								<span class="icon icon-shopping_basket"></span>
-								<span class="badge badge--cart">2</span>
+								<span class="badge badge--cart">{{Cart::count()}}</span>
+
 							</a>
 							<div class="dropdown-menu dropdown-menu--xs-full slide-from-top" role="menu">
 								<div class="container">
@@ -227,7 +229,7 @@
 													<h2><a href="#">{{ $element->name}}</a></h2>
 												</div>
 												<div class="cart__item__info__price"><span class="info-label">Price:</span><span>${{ number_format($element->price)}}</span></div>
-												<div class="cart__item__info__qty"><span class="info-label">Qty:</span><input type="text" class="input--ys" value='1' /></div>
+												<div class="cart__item__info__qty"><span class="info-label">Qty:</span><input type="text" class="input--ys" value='{{ $element->qty}}' /></div>
 												<div class="cart__item__info__details">
 													<div class='multitooltip'>
 														<a href="#">Details</a>
