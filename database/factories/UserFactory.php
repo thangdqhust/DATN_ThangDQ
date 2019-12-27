@@ -16,11 +16,22 @@ use Faker\Generator as Faker;
 $factory->define(App\User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
-        'avata' => $faker->image($dir = '/tmp', $width = 640, $height = 480),
+        'avata' => $faker->image('public/images/users',400,300, null, false) ,
         'phone' => $faker->phoneNumber,
-        'addess' => $faker->address,
-        'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
+        'address' => $faker->address,
+        'email' => '1@gmail.com',
+        'password' => Hash::make('123123'),
+        'remember_token' => str_random(10),
+    ];
+});
+$factory->define(App\Admin::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'avata' => $faker->image('public/images/users',400,300, null, false) ,
+        'phone' => $faker->phoneNumber,
+        'address' => $faker->address,
+        'email' => '123@gmail.com',
+        'password' => Hash::make('123123'),
         'remember_token' => str_random(10),
     ];
 });

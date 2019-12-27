@@ -54,28 +54,23 @@ class UserController extends Controller
 		return response()->json($data);
 	}
 	public function store(UserRequest $request) {
-		if ($request->hasFile('image')) {
-        $imageName= 'http://'.request()->getHttpHost().'/images/users/'.time().'.'.$request->image->getClientOriginalExtension();
-        $request->image->move(public_path('images/users'), $imageName);
-		}else{
-			$imageName='http://'.request()->getHttpHost().'/images/userDefault.png';
-		}
-        
+        $imageName= '/images/users/userDefault.png';
+		if ($request->hasFile('avata')) {
+            $imageName= '/images/users/'.time().'.'.$request->avata->getClientOriginalExtension();
+            $request->avata->move(public_path('images/users'), $imageName);
+		}        
         $data=$request->all();
         $data['avata']=$imageName;
         $data['password']=Hash::make($data['password']);
         unset($data['image']);
 		$user= User::create($data);
 		 return $user;
-		// return redirect()->back();
 	}
 	public function updateUser(UserUpdateRequest $request) {
         $data=$request->all();
-        unset($data['image']);
         unset($data['id']);
-		if ($request->hasFile('image')) {
+		if ($request->hasFile('avata')) {
         $imageName= 'http://'.request()->getHttpHost().'/images/users/'.time().'.'.$request->image->getClientOriginalExtension();
-
         $request->image->move(public_path('images/users'), $imageName);
         $data['avata']=$imageName;
 		}
@@ -83,7 +78,7 @@ class UserController extends Controller
         $id=$request->only(['id']);
         $boolean=User::find($id)->first()->update($data);
         if ($boolean) {
-		return User::find($id)->first();
+		return response()->json(['success'=>'201']);
         }else{
         	return response()->json(['error'=>'500']);
         }
