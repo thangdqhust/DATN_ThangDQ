@@ -6,17 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 use Yajra\Datatables\Datatables;
 use App\Product;
-use App\Vendor;
 use App\Category;
-use App\Product_detail;
 use App\User;
 use App\Gallary_image;
-use App\Size;
-use App\Color;
-use Auth;
 use App\Order;
-use App\Order_detail;
-use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     /**
@@ -26,7 +20,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth','role');
     }
 
     /**

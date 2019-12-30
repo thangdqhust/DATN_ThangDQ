@@ -29,7 +29,7 @@ class ProductRequest extends FormRequest
             'content'       => 'required',
             'sale_cost'   => 'required',
             'origin_cost'          => 'required',
-            'vendor_id'          => 'required',
+            'user_id'          => 'required',
             'category_id'          => 'required',
             'images'         => 'required',
         ];
@@ -41,7 +41,7 @@ class ProductRequest extends FormRequest
             'content.required'       => 'The content is required',
             'origin_cost.required'   => 'The category_id is required',
             'sale_cost.required'          => 'The tags is required',
-            'vendor_id.required'            => 'This is required',    
+            'user_id.required'            => 'This is required',    
             'category_id.required'            => 'This is required',    
             'images.required'            => 'This is required',    
     ];

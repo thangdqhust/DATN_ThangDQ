@@ -19,7 +19,7 @@
   <h2>Categories</h2>
   <br />
 
-  <a href="#"  class="btn btn-info" data-toggle="modal" data-target="#create">+ Thêm mới </a>
+  <a href="#"  class="btn btn-info" data-toggle="modal" data-target="#create">+ Add New </a>
   <br><br>
   <table id="users-table" class="table table-striped">
     <thead class="flg">

@@ -19,40 +19,51 @@ use Yajra\Datatables\Datatables;
 class UserController extends Controller
 {
     public function index(){
-        $currentUser= Auth::guard('admin')->user();
-    	$users= User::get();
-    	// dd($currentUser);
-    	$sumNotice="0";
-    	$sumPost="0";
-    	return view('user.index',['currentUser'=>$currentUser,'sumNotice'=>$sumNotice,'sumPost'=>$sumPost],['users'=>$users]);
+        
+    	return view('user.index');
 	}
 	public function anyData(){	
     
         $users = User::select('users.*');
         return Datatables::of($users)
-        ->addColumn('action', function ($user) {
+        ->addColumn('action', function ($data) {
             return'
-            <button type="button" class="btn btn-xs btn-info" data-toggle="modal" href="#showProduct"><i class="fa fa-eye" aria-hidden="true"></i></button>
-            <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getProduct('.$user['id'].')" href="#editUser"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-            <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('.$user['id'].')"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+            <button type="button" class="btn btn-xs btn-warning"data-toggle="modal" onclick="getInfo('.$data['id'].')" href="#edit-modal"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-xs btn-danger" onclick="alDelete('.$data['id'].')"><i class="fa fa-trash" aria-hidden="true"></i></button>';
         })
         ->editColumn('avata','<img src="{{$avata}}" style="width:100px;" class="img img-responsive"  alt="">')
-        ->rawColumns(['avata','action'])
-        ->setRowId('user-{{$id}}')
+        ->editColumn('role', function ($data) {
+            if ($data['role']==0) {
+                return '<select class="form-control" onchange="setRole('.$data['id'].')"><option selected>User</option><option>Vender</option></select>';
+            }else{
+                return '<select class="form-control" onchange="setRole('.$data['id'].')"><option>User</option><option selected>Vender</option></select>';
+            }
+        })
+        ->rawColumns(['avata','action','role'])
+        ->setRowId('rowHtml-{{$id}}')
         ->make(true);
 }
 	public function getData($id){
     	$users=User::find($id);
-    	// $categories=Category::orderBy('id','DESC')->get();
     	return $users;
 	}
 	
 	public function destroy($id){
-		// Product::find($id);
-		// $data=User::find($id);
 		$data=User::find($id)->delete();
 		return response()->json($data);
 	}
+    public function setRole($id){
+        $data=User::find($id);
+        if ($data->role==0) {
+            $data->role=1;
+            $data->save();
+        }else{
+            $data->role=0;
+            $data->save();
+        }
+        return response()->json($data);
+    }
+    
 	public function store(UserRequest $request) {
         $imageName= '/images/users/userDefault.png';
 		if ($request->hasFile('avata')) {

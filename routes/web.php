@@ -75,9 +75,10 @@ Route::post('getSize-one', 'FontEndController@getSize_one');
 
                                 Route::get('anyUser', 'UserController@anyData')->name('users.data');
                                 Route::get('users', 'UserController@index');
-                                Route::get('users/edit/{id}', 'UserController@getData');
+                                Route::get('user/edit/{id}', 'UserController@getData');
                                 Route::post('users/store', 'UserController@store');
-                                Route::delete('users/{id}', 'UserController@destroy');
+                                Route::delete('user/{id}', 'UserController@destroy');
+                                Route::post('user/role/{id}', 'UserController@setRole');
                                 Route::post('users/update', 'UserController@updateUser');
 
                                 Route::get('anyCategory', 'CategoryController@anyData')->name('categories.data');
@@ -105,7 +106,7 @@ Route::post('getSize-one', 'FontEndController@getSize_one');
 
                 // Route::post('users/{slug}', 'UserController@manageUser');
 
-                                Route::get('orders', 'OrderController@index')->name('home');
+                                Route::get('orders', 'OrderController@index')->name('orders');
                                 Route::get('adminorder', 'OrderController@anyData')->name('adminOder.data');
                                 Route::get('getOrder/{id}', 'OrderController@getOrder');
                                 Route::delete('deleteOrder/{id}', 'OrderController@deleteOrder');

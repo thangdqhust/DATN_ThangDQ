@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="{{asset('js/jquery.validate.min.js')}}" type="text/javascript"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
   <script>
@@ -93,7 +94,7 @@
                   <li><!-- start message -->
                     <a href="#">
                       <div class="pull-left">
-                        <img src="{{$currentUser['avata'] }}" class="img-circle" alt="User Image">
+                        <img src="{{Auth::guard('admin')->user()->avata}}" class="img-circle" alt="User Image">
                       </div>
                       <h4>
                         Support Team
@@ -112,20 +113,15 @@
           <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-bell-o"></i>
-              @if ($sumNotice!=='0')
-              <span class="label label-warning">{{$sumNotice}}</span>
-              @endif
+              <span class="label label-warning">0</span>
             </a>
             <ul class="dropdown-menu">
-              <li class="header">You have {{$sumNotice}} notifications</li>
+              <li class="header">You have 0 notifications</li>
               <li>
                 <ul class="menu">
                   <li>
-                    <a href="{{ asset('admin/posts/browsingPosts') }}">
-                      @if ($sumPost!==0)
-                        {{-- expr --}}
-                      <i class="fa fa-paste"></i> Have {{$sumPost}} New Posts has not been approved
-                      @endif
+                    <a href="{{ asset('admin/posts/browsingProducts') }}">
+                      <i class="fa fa-paste"></i> Have 0 New Posts has not been approved
                     </a>
                   </li>
                 </ul>
@@ -169,17 +165,17 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="{{ asset($currentUser['avata']) }}" class="user-image" alt="User Image">
-              <span class="hidden-xs">{{$currentUser['name']}}</span>
+              <img src="{{ Auth::guard('admin')->user()->avata }}" class="user-image" alt="User Image">
+              <span class="hidden-xs">{{Auth::guard('admin')->user()->name}}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="{{ asset($currentUser['avata']) }}" class="img-circle" alt="User Image">
+                <img src="{{ Auth::guard('admin')->user()->avata }}" class="img-circle" alt="User Image">
 
                 <p>
-                  {{$currentUser['name']}}
-                  <small>{{$currentUser['email']}}</small>
+                  {{Auth::guard('admin')->user()->name}}
+                  <small>{{Auth::guard('admin')->user()->email}}</small>
                 </p>
               </li>
               <!-- Menu Body -->
@@ -234,10 +230,10 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{{ asset($currentUser['avata']) }}" class="img-circle" alt="User Image">
+          <img src="{{ Auth::guard('admin')->user()->avata }}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>{{$currentUser['name']}}</p>
+          <p>{{Auth::guard('admin')->user()->name}}</p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -518,9 +514,6 @@
 <script src="{{ asset('js/admin/jquery.dataTables.min.js') }}"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.js"></script>
-<!-- SlimScroll -->
-{{-- <script src="{{asset('css/_all-skins.min.css')}}"></script> --}}
-<!-- FastClick -->
 <script src="{{asset('js/admin/fastclick.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('js/admin/adminlte.min.js')}}"></script>

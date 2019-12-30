@@ -1,15 +1,15 @@
 @extends('layouts.adminheader')
 @section('css')
 <style type="text/css" media="screen">
-.half-form{
-  width: 50%;
-  padding: 10px;
-  float: left;
+  .half-form{
+    width: 50%;
+    padding: 10px;
+    float: left;
 
-}
-.modal-dialog{
-  width: 100%;
-}
+  }
+  .modal-dialog{
+    width: 100%;
+  }
 
 </style>
 @endsection
@@ -20,130 +20,102 @@
 
 
   <br><br>
+  <a class="btn btn-primary" data-toggle="modal" href='#add-modal'>+Add New</a>
 
   <br><br>
   <table class="table table-bordered" id="users-table">
     <thead>
       <tr>
         <th>ID</th>
-        <th>Code</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Address</th>
-        <th>Total</th>
-        <th>Update</th>
-        <th>Action</th>
+        <th>Receive</th>
+        <th>Leave</th>
+        <th>Member</th>
+        <th>Product</th>
+        <th>Customer</th>
+        <th>Note</th>
+        <th>Status</th>
       </tr>
     </thead>
   </table>
 </div>
 
-  {{-- ################################################
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="edituser">Add New Order</h5>
+      </div>
+      <div class="modal-body">
+        <form id="add-form" action="{{asset('admin/order/store')}}" method="POST" >
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="name">Name:</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="email">Email:</label>       
+            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+          </div>
+          <br><br>
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="avata">Avata:</label>
+            <img id="imgCreate" class="img img-responsive" width="30%" alt="">
+            <input type="file" name="image" id="file" onchange="loadFileC(event)">
+          </div>
+          <br><br>
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="phone">Phone:</label>        
+            <input type="tel" name="phone"  class="form-control" id="phone" value="" placeholder="">
+          </div>
+          <div class="form-group">
+           <label class="control-label col-sm-2" for="name">Address:</label>
+           <input type="text" class="form-control" id="address" placeholder="Enter address" name="address">
+         </div>
+         <div class="portlet-title">
+          <div class="form-group">        
+            <label class="control-label col-sm-2" for="description">Password:</label>
+            <input type="password"  class="form-control" name="password" id='password' placeholder=""> 
+          </div>
+        </div> 
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+@endsection
 
-                         Model WareHousing
-
-                         ################################################ --}}
-                         <div class="modal fade" id="wareHousing">
-                          <div class="modal-dialog" style="width: 50%;">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title" id="productTitle"></h4>
-                              </div>
-                              <div class="container">
-
-                               
-                              </div>
-                              <div class="modal-body" id="allWareHousing">
-
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {{-- ################################################
-
-                         Model WareHousing
-
-                         ################################################ --}}
-
-                         <div class="modal fade" id="AddWareHousing">
-                          <div class="modal-dialog" style="width: 50%;">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title">Modal title</h4>
-                              </div>
-                              <div class="modal-body">
-
-                                <div class="form-group">
-                                  <label for="">Color</label>
-                                  <select name="color" id="color_id" class="form-control" >
-                                    @foreach ($colors as $color)
-                                    <option value="{{$color['id']}}" selected>{{$color['color']}}</option>
-                                    @endforeach
-                                  </select>
-                                </div>
-
-                                <div class="form-group">
-                                  <label for="">Size</label>
-                                  <select name="color" id="size_id" class="form-control" >
-                                    @foreach ($sizes as $size)
-                                    <option value="{{$size['id']}}" selected>{{$size['size']}}</option>
-                                    @endforeach
-                                  </select>
-                                </div>
-                                <div class="form-group">
-                                  <label for="">Quantity  </label>
-                                  <input type="text" id="quantity" class="form-control">
-                                </div>
-                                <input type="hidden" id="product_id">
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="storeWareHousing">Save changes</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <input type="hidden" id="codeWareHousing" value="">
-                        @endsection
-
-                        @section('js')
-                        <script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
-                        <script>
-                          CKEDITOR.replace( 'content' );
-                          CKEDITOR.replace( 'econtent' );
-                        </script>
-                        <script>
-                          $(function() {
-                            $('#users-table').DataTable({
-                              processing: true,
-                              serverSide: true,
-                              ajax: '{!! route('adminOder.data') !!}',
-                              columns: [
-                              { data: 'id', name: 'id' },
-                              { data: 'code', name: 'code' },
-                              { data: 'name', name: 'name' },
-                              { data: 'email', name: 'email' },
-                              { data: 'phone', name: 'phone' },
-                              { data: 'address', name: 'address' },
-                              { data: 'total', name: 'total' },
-                              { data: 'updated_at', name: 'updated_at' },
-                              { data: 'action', name: 'action' },
-                              ]
-                            });
-                          });
-                        </script>
-                        <script>
-                          CKEDITOR.replace( 'content' );
-                          CKEDITOR.replace( 'econtent' );
-                          CKEDITOR.editorConfig = function( config ) {
+@section('js')
+<script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
+<script>
+  CKEDITOR.replace( 'content' );
+  CKEDITOR.replace( 'econtent' );
+</script>
+<script>
+  $(function() {
+    $('#users-table').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: '{!! route('adminOder.data') !!}',
+      columns: [
+      { data: 'id', name: 'id' },
+      { data: 'receive', name: 'receive' },
+      { data: 'leave', name: 'leave' },
+      { data: 'member', name: 'member' },
+      { data: 'product_id', name: 'product_id' },
+      { data: 'user_id', name: 'user_id' },
+      { data: 'note', name: 'note' },
+      { data: 'status', name: 'status' },
+      ]
+    });
+  });
+</script>
+<script>
+  CKEDITOR.replace( 'content' );
+  CKEDITOR.replace( 'econtent' );
+  CKEDITOR.editorConfig = function( config ) {
         // Define changes to default configuration here. For example:
         // config.language = 'fr';
         // config.uiColor = '#AADC6E';
@@ -162,34 +134,34 @@
           }
         });
       });
-        $("#files").change(function(){
-         $('#image_preview').html("");
-         var total_file=document.getElementById("files").files.length;
-         console.log(document.getElementById("files").files);
-         for(var i=0;i<total_file;i++)
-         {
-          $('#image_preview').append("<img class'img-responsive img' style='width:50px' src='"+URL.createObjectURL(event.target.files[i])+"'>");
-        }
+      $("#files").change(function(){
+       $('#image_preview').html("");
+       var total_file=document.getElementById("files").files.length;
+       console.log(document.getElementById("files").files);
+       for(var i=0;i<total_file;i++)
+       {
+        $('#image_preview').append("<img class'img-responsive img' style='width:50px' src='"+URL.createObjectURL(event.target.files[i])+"'>");
+      }
 
+    });
+
+
+      function plusData(id) {$.ajax({
+        type: "GET",
+        url: "product/plus/"+id,
+
+        success: function(response)
+        {
+
+          console.log(response);     
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          toastr.error(thrownError);
+        }
       });
 
-        
-function plusData(id) {$.ajax({
-  type: "GET",
-  url: "product/plus/"+id,
-
-  success: function(response)
-  {
-
-    console.log(response);     
-  },
-  error: function (xhr, ajaxOptions, thrownError) {
-    toastr.error(thrownError);
-  }
-});
-
-}
-      function wareHousing(id) {
+    }
+    function wareHousing(id) {
         // $('#editPost').modal('show');
         $('#product_id').val(id);
 
@@ -198,37 +170,37 @@ function plusData(id) {$.ajax({
           url: "{{ asset('admin/getOrder') }}/"+id,
           success: function(response)
           { 
-              console.log(response);
-              var html=
-              '<table class="table table-bordered">'+ 
-              '<thead>'+
-              '<tr>'+
-              '<th>ID</th>'+
-              '<th>Name</th>'+
-              '<th>Image</th>'+
-              '<th>Color</th>'+
-              '<th>Size</th>'+
-              '<th>Quantity</th>'+
-              '<th>Unit Price</th>'+
-              '</tr>'+
-              '</thead>'
-              +'<tbody>';
-              var tbody="";
-              for (var i = 0; i < response.length; i++) {
-               tbody=tbody+'<tr id="wareHousing-'+response[i].id+'">'+'<td>'+response[i].id+'</td>'+ 
-               '<td>'+response[i].name+'</td>'+
-               '<td><img src="'+response[i].link+'" class="img img-responsive" style="width:100px;" alt=""></td>'+
-               '<td>'+response[i].color_id+'</td>'+
-               '<td>'+response[i].size_id+'</td>'+ 
-               '<td>'+response[i].quantity+'</td>'+
-               '<td>'+response[i].price+'</td>'+
-               '</tr>';
-             }
-             html=html+tbody+'</tbody>'+'</table>';
-             $('#allWareHousing').html(html);
+            console.log(response);
+            var html=
+            '<table class="table table-bordered">'+ 
+            '<thead>'+
+            '<tr>'+
+            '<th>ID</th>'+
+            '<th>Name</th>'+
+            '<th>Image</th>'+
+            '<th>Color</th>'+
+            '<th>Size</th>'+
+            '<th>Quantity</th>'+
+            '<th>Unit Price</th>'+
+            '</tr>'+
+            '</thead>'
+            +'<tbody>';
+            var tbody="";
+            for (var i = 0; i < response.length; i++) {
+             tbody=tbody+'<tr id="wareHousing-'+response[i].id+'">'+'<td>'+response[i].id+'</td>'+ 
+             '<td>'+response[i].name+'</td>'+
+             '<td><img src="'+response[i].link+'" class="img img-responsive" style="width:100px;" alt=""></td>'+
+             '<td>'+response[i].color_id+'</td>'+
+             '<td>'+response[i].size_id+'</td>'+ 
+             '<td>'+response[i].quantity+'</td>'+
+             '<td>'+response[i].price+'</td>'+
+             '</tr>';
+           }
+           html=html+tbody+'</tbody>'+'</table>';
+           $('#allWareHousing').html(html);
            
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
+         },
+         error: function (xhr, ajaxOptions, thrownError) {
           toastr.error(thrownError);
         }
       });
@@ -313,6 +285,6 @@ function plusData(id) {$.ajax({
       function checkNull(value){
         return (value == null || value === '');
       }
-</script>
+    </script>
 
-@endsection
+    @endsection
